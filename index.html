@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Caustic 74 | Live</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+        #canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
+        .content-wrapper { position: relative; z-index: 10; width: 100%; min-height: 100vh; display: flex; justify-content: center; padding: 40px 24px 120px 24px; }
+        .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 20px; transition: 0.3s; }
+        .glass:active { transform: scale(0.96); }
+        .progress-bg { background: rgba(255,255,255,0.05); height: 4px; border-radius: 10px; overflow: hidden; width: 120px; margin: 8px auto; }
+        .progress-fill { background: linear-gradient(90deg, #6366f1, #a5b4fc); height: 100%; width: 0%; transition: width 1.5s ease-in-out; }
+        #bookOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(30px); z-index: 100; display: none; flex-direction: column; align-items: center; padding: 40px 20px; overflow-y: auto; }
+        .num-icon { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; border: 1px solid rgba(255,255,255,0.2); }
+        .fa-instagram { background: -webkit-linear-gradient(#f9ce34, #ee2a7b, #6228d7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="content-wrapper">
+        <div class="max-w-sm w-full">
+            <div class="text-center mb-6">
+                <img src="https://i.ibb.co.com/twWBdBVn/IMG-20260101-232150-611.webp" class="w-20 h-20 rounded-full mx-auto border-2 border-white/10 shadow-lg mb-4">
+                <h1 class="text-lg font-black tracking-widest uppercase">The Caustic 74</h1>
+                <div class="mt-2">
+                    <div id="progressText" class="text-[9px] text-indigo-400 font-bold tracking-[0.2em] uppercase">Exploring '26 • 0%</div>
+                    <div class="progress-bg"><div id="progressFill" class="progress-fill"></div></div>
+                </div>
+                <div id="clock" class="text-[11px] font-mono text-gray-500 mt-2">00:00:00</div>
+            </div>
+            <div class="text-center mb-8 px-6">
+                <p class="text-[11px] text-gray-400 italic leading-relaxed tracking-wide font-medium">"It is better to be hated for who you are than to be loved for someone you are not."</p>
+                <div class="h-[1px] w-6 bg-indigo-500/40 mx-auto mt-4"></div>
+            </div>
+            <button onclick="openBooks()" class="glass w-full p-6 mb-4 flex items-center justify-between group">
+                <div class="flex items-center gap-4"><i class="fas fa-book text-indigo-500 text-xl"></i><span class="text-sm font-bold tracking-widest uppercase">The Archives</span></div>
+                <i class="fas fa-chevron-right text-gray-600"></i>
+            </button>
+            <div class="space-y-3">
+                <a href="https://www.instagram.com/thecaustic74" target="_blank" class="glass p-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3"><i class="fab fa-instagram text-lg"></i><span class="text-sm font-bold uppercase tracking-widest">Instagram</span></div>
+                    <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
+                </a>
+                <a href="https://myanimelist.net/profile/damm111" target="_blank" class="glass p-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3"><i class="fas fa-play-circle text-[#2e51a2] text-lg"></i><span class="text-sm font-bold uppercase tracking-widest">MyAnimeList</span></div>
+                    <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
+                </a>
+                <div class="glass p-4 flex items-center justify-between opacity-30">
+                    <div class="flex items-center gap-3"><i class="fab fa-discord text-[#5865F2] text-lg"></i><span class="text-[10px] font-bold uppercase tracking-widest">Discord</span></div>
+                    <span class="text-[8px] font-bold text-gray-600 uppercase">Soon</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="bookOverlay">
+        <div class="w-full max-w-xs flex justify-between items-center mb-10">
+            <h2 class="text-lg font-black tracking-widest uppercase">The Archives</h2>
+            <button onclick="closeBooks()" class="text-white text-4xl">&times;</button>
+        </div>
+        <div class="w-full max-w-xs space-y-4">
+            <div class="glass p-4 flex items-center gap-5">
+                <div class="num-icon bg-green-500/10 text-green-400 border-green-500/30">1</div>
+                <div><p class="text-[8px] text-green-500 font-bold uppercase tracking-widest">History</p><p class="text-sm font-bold">Ar-Raheequl Makhtum</p></div>
+            </div>
+            <div class="glass p-4 flex items-center gap-5">
+                <div class="num-icon bg-indigo-500/10 text-indigo-400 border-indigo-500/30">2</div>
+                <div><p class="text-[8px] text-indigo-400 font-bold uppercase tracking-widest">Logic</p><p class="text-sm font-bold">Paradoxical Sajid</p></div>
+            </div>
+            <div class="glass p-4 flex items-center gap-5">
+                <div class="num-icon bg-red-500/10 text-red-400 border-red-500/30">3</div>
+                <div><p class="text-[8px] text-red-500 font-bold uppercase tracking-widest">Resilience</p><p class="text-sm font-bold">La Tahzan</p></div>
+            </div>
+            <div class="glass p-4 flex items-center gap-5">
+                <div class="num-icon bg-amber-500/10 text-amber-400 border-amber-500/30">4</div>
+                <div><p class="text-[8px] text-amber-500 font-bold uppercase tracking-widest">Systems</p><p class="text-sm font-bold">Islamic Finance</p></div>
+            </div>
+            <div class="glass p-4 flex items-center gap-5">
+                <div class="num-icon bg-blue-500/10 text-blue-400 border-blue-500/30">5</div>
+                <div><p class="text-[8px] text-blue-500 font-bold uppercase tracking-widest">Behavioral</p><p class="text-sm font-bold">Psychology of Money</p></div>
+            </div>
+        </div>
+        <button onclick="closeBooks()" class="mt-12 text-[10px] text-gray-500 uppercase tracking-[0.3em] font-bold">Back</button>
+    </div>
+    <script>
+        function updateProgress() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayOfYear = Math.floor(diff / oneDay);
+            const percent = ((dayOfYear / 365) * 100).toFixed(1);
+            document.getElementById('progressText').innerText = `Exploring '26 • ${percent}%`;
+            setTimeout(() => { document.getElementById('progressFill').style.width = `${percent}%`; }, 500);
+        }
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        function resize() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < 70; i++) stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 1.5, vel: Math.random() * 0.2 + 0.05 });
+        }
+        function draw() {
+            ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2); ctx.fill(); s.y += s.vel; if (s.y > canvas.height) s.y = 0; });
+            requestAnimationFrame(draw);
+        }
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour12: false });
+        }
+        window.addEventListener('resize', resize);
+        setInterval(updateClock, 1000);
+        resize(); draw(); updateClock(); updateProgress();
+        function openBooks() { document.getElementById('bookOverlay').style.display = 'flex'; }
+        function closeBooks() { document.getElementById('bookOverlay').style.display = 'none'; }
+    </script>
+</body>
+</html>
