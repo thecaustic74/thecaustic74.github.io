@@ -4,6 +4,15 @@ here<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
+    <style>
+        /* This runs before everything else */
+        html, body { 
+            background-color: #050505 !important; 
+            margin: 0; 
+            padding: 0; 
+        }
+    </style>
+
     <title>The Caustic 74 | Live</title>
     <meta name="title" content="The Caustic 74">
     <meta name="description" content="Digital repository of history, logic, and resilience.">
@@ -17,14 +26,15 @@ here<!DOCTYPE html>
 
     <link rel="icon" type="image/x-icon" href="https://i.ibb.co.com/twWBdBVn/IMG-20260101-232150-611.webp">
 
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="d61360dd-54f0-45d4-8ad1-ca220ae33e6b"></script>
+    <script async src="https://cloud.umami.is/script.js" data-website-id="d61360dd-54f0-45d4-8ad1-ca220ae33e6b"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        body { background-color: #050505; color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+        body { color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         #canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
         
         .content-wrapper { 
