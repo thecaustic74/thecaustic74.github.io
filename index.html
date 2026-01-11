@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+here<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -56,18 +56,10 @@
     <title>The Caustic 74 | Live</title>
     <meta name="title" content="The Caustic 74">
     <meta name="description" content="Digital repository of history, logic, and resilience.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://thecaustic74.github.io/">
-    <meta property="og:title" content="The Caustic 74">
-    <meta property="og:description" content="Exploring the depths of the archives.">
-    <meta property="og:image" content="https://i.ibb.co.com/twWBdBVn/IMG-20260101-232150-611.webp">
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:image" content="https://i.ibb.co.com/twWBdBVn/IMG-20260101-232150-611.webp">
-
+    
     <link rel="icon" type="image/x-icon" href="https://i.ibb.co.com/twWBdBVn/IMG-20260101-232150-611.webp">
 
-    <script async src="https://cloud.umami.is/script.js" data-website-id="d61360dd-54f0-45d4-8ad1-ca220ae33e6b"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -82,10 +74,10 @@
             min-height: 100dvh; 
             display: flex; 
             justify-content: center; 
-            padding: 40px 24px 120px 24px; 
+            padding: 80px 24px 120px 24px; 
         }
 
-        /* --- THE INDIGO GLOW UPDATE --- */
+        /* --- THE INDIGO GLOW (PRESERVED) --- */
         .glass { 
             background: rgba(255, 255, 255, 0.03); 
             border: 1px solid rgba(255, 255, 255, 0.1); 
@@ -96,23 +88,34 @@
         }
 
         .glass:hover { 
-            background: rgba(99, 102, 241, 0.1); /* Indigo background tint */
+            background: rgba(99, 102, 241, 0.1);
             border: 1px solid rgba(99, 102, 241, 0.6);
             transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.4); /* The Indigo Glow */
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.4);
         }
 
-        .glass:active { 
-            transform: scale(0.96); 
-            background: rgba(99, 102, 241, 0.2);
+        /* --- VAULT NAV BUTTON --- */
+        .vault-trigger {
+            position: fixed; top: 25px; left: 25px; z-index: 200;
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
+            opacity: 0.6; transition: 0.3s;
         }
-        /* --- END GLOW UPDATE --- */
+        .vault-trigger:hover { opacity: 1; color: #6366f1; }
+
+        /* --- OVERLAYS --- */
+        #vaultOverlay, #bookOverlay, #terminalOverlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.98); backdrop-filter: blur(30px); 
+            z-index: 500; display: none; flex-direction: column; align-items: center; 
+            padding: 40px 20px; overflow-y: auto; 
+        }
+
+        #terminalOverlay { z-index: 1000; background: rgba(5,5,5,0.99); justify-content: center; }
+        #terminal-text { font-family: 'Fira Code', monospace; color: #6366f1; text-align: center; max-width: 400px; }
 
         .btn-text { letter-spacing: 0.15em; font-size: 0.75rem; font-weight: 700; }
         .progress-bg { background: rgba(255,255,255,0.05); height: 4px; border-radius: 10px; overflow: hidden; width: 120px; margin: 8px auto; }
         .progress-fill { background: linear-gradient(90deg, #6366f1, #a5b4fc); height: 100%; width: 0%; transition: width 1.5s ease-in-out; }
-        
-        #bookOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(30px); z-index: 100; display: none; flex-direction: column; align-items: center; padding: 40px 20px; overflow-y: auto; }
         .num-icon { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; border: 1px solid rgba(255,255,255,0.2); }
         .fa-instagram { background: -webkit-linear-gradient(#f9ce34, #ee2a7b, #6228d7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
@@ -123,6 +126,11 @@
             <div class="spinner"></div>
             <div class="loader-text">Initializing Archive</div>
         </div>
+    </div>
+
+    <div class="vault-trigger" onclick="openVault()">
+        <i class="fas fa-bars text-xl"></i>
+        <span class="text-[9px] font-black tracking-[0.3em] uppercase">The Vault</span>
     </div>
 
     <canvas id="canvas"></canvas>
@@ -147,7 +155,7 @@
             </div>
 
             <div class="space-y-4">
-                <button onclick="openBooks()" class="glass w-full p-6 mb-4 flex items-center justify-between group">
+                <button onclick="openBooks()" class="glass w-full p-6 flex items-center justify-between group">
                     <div class="flex items-center gap-4">
                         <i class="fas fa-book text-indigo-500 text-xl"></i>
                         <span class="btn-text uppercase">The Archives</span>
@@ -182,6 +190,45 @@
         </div>
     </div>
 
+    <div id="vaultOverlay">
+        <div class="w-full max-w-xs flex justify-between items-center mb-10">
+            <h2 class="text-lg font-black tracking-widest uppercase">The Vault</h2>
+            <button onclick="closeVault()" class="text-white text-4xl">&times;</button>
+        </div>
+
+        <div onclick="runTerminal()" class="glass w-full p-5 mb-8 border-dashed border-indigo-500/30 flex items-center gap-4">
+            <i class="fas fa-terminal text-indigo-500"></i>
+            <span class="btn-text uppercase">Daily Fragment</span>
+        </div>
+
+        <div id="folder-directory" class="w-full max-w-xs space-y-4">
+            <div onclick="openFolder('divine')" class="glass p-6 border-l-4 border-yellow-500 flex justify-between items-center">
+                <div><p class="text-[10px] font-black uppercase tracking-widest">Quran_verses</p><p class="text-[9px] text-gray-500 uppercase mt-1">10 Verses</p></div>
+                <i class="fas fa-folder-open text-gray-700"></i>
+            </div>
+            <div onclick="openFolder('logic')" class="glass p-6 border-l-4 border-indigo-500 flex justify-between items-center">
+                <div><p class="text-[10px] font-black uppercase tracking-widest">Logic_Core</p><p class="text-[9px] text-gray-500 uppercase mt-1">10 Fragments</p></div>
+                <i class="fas fa-folder-open text-gray-700"></i>
+            </div>
+            <div onclick="openFolder('science')" class="glass p-6 border-l-4 border-cyan-400 flex justify-between items-center">
+                <div><p class="text-[10px] font-black uppercase tracking-widest">Science_Units</p><p class="text-[9px] text-gray-500 uppercase mt-1">10 Solutions</p></div>
+                <i class="fas fa-folder-open text-gray-700"></i>
+            </div>
+        </div>
+
+        <div id="folder-items" class="w-full max-w-xs hidden space-y-4">
+            <button onclick="backToDirectory()" class="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                <i class="fas fa-arrow-left"></i> Directory
+            </button>
+            <div id="items-injection-point" class="space-y-4 pb-20"></div>
+        </div>
+    </div>
+
+    <div id="terminalOverlay">
+        <div id="terminal-text"></div>
+        <button onclick="closeTerminal()" id="term-close" class="mt-12 text-[10px] text-gray-500 font-bold uppercase tracking-widest hidden border-b border-gray-800 pb-1">Disconnect</button>
+    </div>
+
     <div id="bookOverlay">
         <div class="w-full max-w-xs flex justify-between items-center mb-10">
             <h2 class="text-lg font-black tracking-widest uppercase">The Archives</h2>
@@ -205,20 +252,61 @@
     </div>
 
     <script>
-        // LOADER LOGIC
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            setTimeout(() => {
-                loader.classList.add('loader-hidden');
-            }, 1000); 
-        });
+        // VAULT DATA
+        const vaultData = {
+            divine: [{t:"94:5",c:"For indeed, with hardship [will be] ease."},{t:"13:28",c:"By the remembrance of Allah do hearts find peace."},{t:"2:286",c:"Allah does not burden a soul beyond that it can bear."},{t:"39:53",c:"Do not despair of the mercy of Allah."},{t:"65:3",c:"He will provide from where he does not expect."},{t:"57:3",c:"He is the First and the Last."},{t:"29:69",c:"We will surely guide them to Our ways."},{t:"2:153",c:"Indeed, Allah is with the patient."},{t:"42:19",c:"Allah is Subtle with His servants."},{t:"14:7",c:"If you are grateful, I will increase you."}],
+            logic: [{t:"Socrates",c:"The unexamined life is not worth living."},{t:"Aurelius",c:"Everything we see is a perspective, not the truth."},{t:"Al-Ghazali",c:"Declare jihad on ego, pride, and greed."},{t:"Bacon",c:"Silence nourishes wisdom."},{t:"Nietzsche",c:"He who has a why to live can bear almost any how."},{t:"Descartes",c:"I think, therefore I am."},{t:"Rumi",c:"The wound is where the light enters."},{t:"Fragment",c:"Call things by their right names."},{t:"Stoic",c:"Power over your mind—not outside events."},{t:"Caustic",c:"Truth is bitter medicine, but the only cure."}],
+            science: [{t:"E=mc²",c:"Mass-Energy",s:"Matter is condensed energy."},{t:"φ (1.618)",c:"Golden Ratio",s:"The universal code of beauty."},{t:"0 Kelvin",c:"Absolute Zero",s:"Atomic motion stops."},{t:"π (3.141)",c:"Pi",s:"The infinite circle ratio."},{t:"F=ma",c:"Newton II",s:"Force = Mass x Acceleration."},{t:"ΔS ≥ 0",c:"Entropy",s:"Universe moves toward disorder."},{t:"c",c:"Light Speed",s:"299,792,458 m/s."},{t:"eⁱπ + 1 = 0",c:"Euler",s:"Connecting 5 fundamental constants."},{t:"Uncertainty",c:"Heisenberg",s:"Cannot know position and momentum perfectly."},{t:"Fibonacci",c:"Growth",s:"Nature's numbering code."}]
+        };
+        const fragments = ["Logic is the shield.", "Control the ego.", "Truth is absolute.", "Knowledge is light.", "Reality is a construct.", "Stay caustic."];
 
-        function delayedLink(url) {
-            setTimeout(() => { window.open(url, '_blank'); }, 400);
+        // LOADER & UI
+        window.addEventListener('load', () => { setTimeout(() => { document.getElementById('loader').classList.add('loader-hidden'); }, 1000); });
+        function delayedLink(url) { setTimeout(() => { window.open(url, '_blank'); }, 400); }
+
+        // NAVIGATION
+        function openBooks() { document.getElementById('bookOverlay').style.display = 'flex'; }
+        function closeBooks() { document.getElementById('bookOverlay').style.display = 'none'; }
+        function openVault() { document.getElementById('vaultOverlay').style.display = 'flex'; }
+        function closeVault() { document.getElementById('vaultOverlay').style.display = 'none'; backToDirectory(); }
+        
+        function openFolder(f) {
+            document.getElementById('folder-directory').classList.add('hidden');
+            document.getElementById('folder-items').classList.remove('hidden');
+            const target = document.getElementById('items-injection-point');
+            target.innerHTML = '';
+            vaultData[f].forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'glass p-5 text-left';
+                div.innerHTML = `<p class="text-[8px] font-black opacity-40 uppercase mb-1 tracking-widest">${item.t}</p>
+                                 <p class="text-xs font-bold leading-relaxed">${item.c}</p>
+                                 ${item.s ? `<p class="text-[10px] mt-4 text-indigo-400 hidden" id="${item.t}">${item.s}</p>` : ''}`;
+                if(item.s) div.onclick = (e) => { e.stopPropagation(); document.getElementById(item.t).classList.toggle('hidden'); };
+                target.appendChild(div);
+            });
+        }
+        function backToDirectory() {
+            document.getElementById('folder-directory').classList.remove('hidden');
+            document.getElementById('folder-items').classList.add('hidden');
         }
 
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+        // TERMINAL LOGIC (FIXED)
+        function runTerminal() {
+            const term = document.getElementById('terminalOverlay');
+            const text = document.getElementById('terminal-text');
+            const closeBtn = document.getElementById('term-close');
+            term.style.display = 'flex'; text.innerHTML = ''; closeBtn.classList.add('hidden');
+            const msg = fragments[Math.floor(Math.random() * fragments.length)];
+            let i = 0;
+            const type = setInterval(() => {
+                text.innerHTML += msg[i]; i++;
+                if(i >= msg.length) { clearInterval(type); closeBtn.classList.remove('hidden'); }
+            }, 60);
+        }
+        function closeTerminal() { document.getElementById('terminalOverlay').style.display = 'none'; }
+
+        // BACKGROUND & PROGRESS
+        const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
         let stars = [];
         function resize() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
@@ -237,17 +325,12 @@
             const diff = now - start;
             const percent = ((Math.floor(diff / (1000 * 60 * 60 * 24)) / 365) * 100).toFixed(1);
             document.getElementById('progressText').innerText = `Exploring '26 • ${percent}%`;
-            setTimeout(() => { 
-                const fill = document.getElementById('progressFill');
-                if(fill) fill.style.width = `${percent}%`; 
-            }, 500);
+            setTimeout(() => { if(document.getElementById('progressFill')) document.getElementById('progressFill').style.width = `${percent}%`; }, 500);
             document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour12: false });
         }
         window.addEventListener('resize', resize);
         setInterval(updateUI, 1000);
         resize(); draw(); updateUI();
-        function openBooks() { document.getElementById('bookOverlay').style.display = 'flex'; }
-        function closeBooks() { document.getElementById('bookOverlay').style.display = 'none'; }
     </script>
 </body>
 </html>
