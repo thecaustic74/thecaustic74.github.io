@@ -1,16 +1,56 @@
-here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <style>
-        /* This runs before everything else */
         html, body { 
             background-color: #050505 !important; 
             margin: 0; 
             padding: 0; 
+            color: #ffffff;
         }
+
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #050505;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease-out, visibility 0.6s;
+        }
+
+        .loader-content { text-align: center; font-family: 'Inter', sans-serif; }
+        
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(99, 102, 241, 0.1);
+            border-top: 2px solid #6366f1;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        .loader-text {
+            color: #6366f1;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .loader-hidden { opacity: 0; visibility: hidden; }
     </style>
 
     <title>The Caustic 74 | Live</title>
@@ -27,14 +67,12 @@ here<!DOCTYPE html>
     <link rel="icon" type="image/x-icon" href="https://i.ibb.co.com/twWBdBVn/IMG-20260101-232150-611.webp">
 
     <script async src="https://cloud.umami.is/script.js" data-website-id="d61360dd-54f0-45d4-8ad1-ca220ae33e6b"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        body { color: #ffffff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
         #canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
         
         .content-wrapper { 
@@ -46,27 +84,29 @@ here<!DOCTYPE html>
             justify-content: center; 
             padding: 40px 24px 120px 24px; 
         }
-        
+
+        /* --- THE INDIGO GLOW UPDATE --- */
         .glass { 
             background: rgba(255, 255, 255, 0.03); 
             border: 1px solid rgba(255, 255, 255, 0.1); 
             backdrop-filter: blur(15px); 
             border-radius: 20px; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             cursor: pointer;
         }
 
         .glass:hover { 
-            background: rgba(255, 255, 255, 0.08); 
-            border: 1px solid rgba(99, 102, 241, 0.4);
-            transform: translateY(-2px);
+            background: rgba(99, 102, 241, 0.1); /* Indigo background tint */
+            border: 1px solid rgba(99, 102, 241, 0.6);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.4); /* The Indigo Glow */
         }
 
         .glass:active { 
-            transform: scale(0.95); 
+            transform: scale(0.96); 
             background: rgba(99, 102, 241, 0.2);
-            border-color: #6366f1;
         }
+        /* --- END GLOW UPDATE --- */
 
         .btn-text { letter-spacing: 0.15em; font-size: 0.75rem; font-weight: 700; }
         .progress-bg { background: rgba(255,255,255,0.05); height: 4px; border-radius: 10px; overflow: hidden; width: 120px; margin: 8px auto; }
@@ -78,6 +118,13 @@ here<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <div id="loader">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <div class="loader-text">Initializing Archive</div>
+        </div>
+    </div>
+
     <canvas id="canvas"></canvas>
     
     <div class="content-wrapper">
@@ -158,6 +205,14 @@ here<!DOCTYPE html>
     </div>
 
     <script>
+        // LOADER LOGIC
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.classList.add('loader-hidden');
+            }, 1000); 
+        });
+
         function delayedLink(url) {
             setTimeout(() => { window.open(url, '_blank'); }, 400);
         }
@@ -182,7 +237,10 @@ here<!DOCTYPE html>
             const diff = now - start;
             const percent = ((Math.floor(diff / (1000 * 60 * 60 * 24)) / 365) * 100).toFixed(1);
             document.getElementById('progressText').innerText = `Exploring '26 • ${percent}%`;
-            setTimeout(() => { document.getElementById('progressFill').style.width = `${percent}%`; }, 500);
+            setTimeout(() => { 
+                const fill = document.getElementById('progressFill');
+                if(fill) fill.style.width = `${percent}%`; 
+            }, 500);
             document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour12: false });
         }
         window.addEventListener('resize', resize);
