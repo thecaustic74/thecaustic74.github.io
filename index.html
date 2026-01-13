@@ -158,12 +158,12 @@
             </div>
 
             <div class="space-y-4">
-                <button onclick="openBooks()" class="glass w-full p-6 flex items-center justify-between group">
+                <button onclick="runTerminal()" class="glass w-full p-6 flex items-center justify-between group border-dashed border-indigo-500/40">
                     <div class="flex items-center gap-4">
-                        <i class="fas fa-book text-indigo-500 text-xl"></i>
-                        <span class="btn-text uppercase">The Archives</span>
+                        <i class="fas fa-terminal text-indigo-500 text-xl"></i>
+                        <span class="btn-text uppercase">Daily Fragment</span>
                     </div>
-                    <i class="fas fa-chevron-right text-gray-600"></i>
+                    <i class="fas fa-bolt text-[10px] text-indigo-400"></i>
                 </button>
 
                 <div onclick="delayedLink('https://www.instagram.com/thecaustic74')" class="glass p-4 flex items-center justify-between">
@@ -199,9 +199,12 @@
             <button onclick="closeVault()" class="text-white text-4xl">&times;</button>
         </div>
 
-        <div onclick="runTerminal()" class="glass w-full p-5 mb-8 border-dashed border-indigo-500/30 flex items-center gap-4">
-            <i class="fas fa-terminal text-indigo-500"></i>
-            <span class="btn-text uppercase">Daily Fragment</span>
+        <div onclick="openBooks()" class="glass w-full p-6 mb-8 flex items-center justify-between group">
+            <div class="flex items-center gap-4">
+                <i class="fas fa-book text-indigo-500 text-xl"></i>
+                <span class="btn-text uppercase">The Archives</span>
+            </div>
+            <i class="fas fa-chevron-right text-gray-600"></i>
         </div>
 
         <div id="folder-directory" class="w-full max-w-xs space-y-4">
@@ -255,7 +258,6 @@
     </div>
 
     <script>
-        // VAULT DATA
         const vaultData = {
             divine: [{t:"94:5",c:"For indeed, with hardship [will be] ease."},{t:"13:28",c:"By the remembrance of Allah do hearts find peace."},{t:"2:286",c:"Allah does not burden a soul beyond that it can bear."},{t:"39:53",c:"Do not despair of the mercy of Allah."},{t:"65:3",c:"He will provide from where he does not expect."},{t:"57:3",c:"He is the First and the Last."},{t:"29:69",c:"We will surely guide them to Our ways."},{t:"2:153",c:"Indeed, Allah is with the patient."},{t:"42:19",c:"Allah is Subtle with His servants."},{t:"14:7",c:"If you are grateful, I will increase you."}],
             logic: [{t:"Socrates",c:"The unexamined life is not worth living."},{t:"Aurelius",c:"Everything we see is a perspective, not the truth."},{t:"Al-Ghazali",c:"Declare jihad on ego, pride, and greed."},{t:"Bacon",c:"Silence nourishes wisdom."},{t:"Nietzsche",c:"He who has a why to live can bear almost any how."},{t:"Descartes",c:"I think, therefore I am."},{t:"Rumi",c:"The wound is where the light enters."},{t:"Fragment",c:"Call things by their right names."},{t:"Stoic",c:"Power over your mind—not outside events."},{t:"Caustic",c:"Truth is bitter medicine, but the only cure."}],
@@ -263,14 +265,12 @@
         };
         const fragments = ["Logic is the shield.", "Control the ego.", "Truth is absolute.", "Knowledge is light.", "Reality is a construct.", "Stay caustic."];
 
-        // LOADER & UI - FIXED DELAY
         window.addEventListener('load', () => { 
             document.getElementById('loader').classList.add('loader-hidden'); 
         });
         
         function delayedLink(url) { setTimeout(() => { window.open(url, '_blank'); }, 400); }
 
-        // NAVIGATION
         function openBooks() { document.getElementById('bookOverlay').style.display = 'flex'; }
         function closeBooks() { document.getElementById('bookOverlay').style.display = 'none'; }
         function openVault() { document.getElementById('vaultOverlay').style.display = 'flex'; }
@@ -296,7 +296,6 @@
             document.getElementById('folder-items').classList.add('hidden');
         }
 
-        // TERMINAL LOGIC
         function runTerminal() {
             const term = document.getElementById('terminalOverlay');
             const text = document.getElementById('terminal-text');
@@ -311,7 +310,6 @@
         }
         function closeTerminal() { document.getElementById('terminalOverlay').style.display = 'none'; }
 
-        // BACKGROUND & PROGRESS
         const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
         let stars = [];
         function resize() {
