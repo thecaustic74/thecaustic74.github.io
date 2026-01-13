@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+here<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,6 +12,8 @@
             margin: 0; 
             padding: 0; 
             color: #ffffff;
+            /* Ensure the body allows clicking the background */
+            min-height: 100vh;
         }
 
         #loader {
@@ -71,7 +73,17 @@
     
     <style>
         body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        #canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; pointer-events: none; }
+        
+        /* New Background Styling */
+        #canvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            z-index: 0; 
+            background: #050505;
+        }
         
         .content-wrapper { 
             position: relative; 
@@ -81,6 +93,13 @@
             display: flex; 
             justify-content: center; 
             padding: 80px 24px 120px 24px; 
+            /* Let clicks pass through empty space to the canvas */
+            pointer-events: none; 
+        }
+
+        /* Re-enable pointer events for the actual interactive content */
+        .content-wrapper > div, .vault-trigger, #vaultOverlay, #bookOverlay, #terminalOverlay {
+            pointer-events: auto;
         }
 
         .glass { 
@@ -258,128 +277,19 @@
     </div>
 
     <script>
+        /* VAULT DATA AND FUNCTIONS */
         const vaultData = {
             divine: [{t:"94:5",c:"For indeed, with hardship [will be] ease."},{t:"13:28",c:"By the remembrance of Allah do hearts find peace."},{t:"2:286",c:"Allah does not burden a soul beyond that it can bear."},{t:"39:53",c:"Do not despair of the mercy of Allah."},{t:"65:3",c:"He will provide from where he does not expect."},{t:"57:3",c:"He is the First and the Last."},{t:"29:69",c:"We will surely guide them to Our ways."},{t:"2:153",c:"Indeed, Allah is with the patient."},{t:"42:19",c:"Allah is Subtle with His servants."},{t:"14:7",c:"If you are grateful, I will increase you."}],
             logic: [{t:"Socrates",c:"The unexamined life is not worth living."},{t:"Aurelius",c:"Everything we see is a perspective, not the truth."},{t:"Al-Ghazali",c:"Declare jihad on ego, pride, and greed."},{t:"Bacon",c:"Silence nourishes wisdom."},{t:"Nietzsche",c:"He who has a why to live can bear almost any how."},{t:"Descartes",c:"I think, therefore I am."},{t:"Rumi",c:"The wound is where the light enters."},{t:"Fragment",c:"Call things by their right names."},{t:"Stoic",c:"Power over your mind—not outside events."},{t:"Caustic",c:"Truth is bitter medicine, but the only cure."}],
             science: [{t:"E=mc²",c:"Mass-Energy",s:"Matter is condensed energy."},{t:"φ (1.618)",c:"Golden Ratio",s:"The universal code of beauty."},{t:"0 Kelvin",c:"Absolute Zero",s:"Atomic motion stops."},{t:"π (3.141)",c:"Pi",s:"The infinite circle ratio."},{t:"F=ma",c:"Newton II",s:"Force = Mass x Acceleration."},{t:"ΔS ≥ 0",c:"Entropy",s:"Universe moves toward disorder."},{t:"c",c:"Light Speed",s:"299,792,458 m/s."},{t:"eⁱπ + 1 = 0",c:"Euler",s:"Connecting 5 fundamental constants."},{t:"Uncertainty",c:"Heisenberg",s:"Cannot know position and momentum perfectly."},{t:"Fibonacci",c:"Growth",s:"Nature's numbering code."}]
         };
-        const fragments = [
-  "Logic is the shield.", "Control the ego.", "Truth is absolute.", "Knowledge is light.", 
-  "Reality is a construct.", "Stay caustic.", "Action over overthinking.", "Done is better than perfect.", 
-  "Momentum builds motivation.", "Consistency > Intensity.", "Slow progress is still progress.", 
-  "Fall seven times, stand up eight.", "Win the morning, win the day.", "Discipline > Motivation.", 
-  "Don’t stop until you’re proud.", "Focus on the how, not the what if.", "Your only limit is your mind.", 
-  "Tiny habits, big results.", "Start where you are.", "Own the day.", "Precision is power.", 
-  "Silence is an answer.", "Master the routine.", "Embrace the friction.", "Efficiency is life.", 
-  "No excuses, only data.", "Focus is a muscle.", "Adapt or expire.", "Keep the edge sharp.", 
-  "Endure and survive.", "Output over input.", "Calculated risks only.", "Emotions are variables.", 
-  "Solve the problem.", "Stay cold, stay focused.", "Victory is in the details.", "Time is the only currency.", 
-  "Kill the distractions.", "Build the machine.", "Execution is everything.", "Do not hesitate.", 
-  "Analyze, then act.", "Strength is earned.", "Hard reset the mind.", "Minimize the noise.", 
-  "Results over intentions.", "Stay objective.", "Burn the ships.", "Move with purpose.", 
-  "Game the system.", "Default to action.", "Sharpen the blade.", "Reject mediocrity.", 
-  "Entropy is the enemy.", "Seek the truth.", "Limit the chatter.", "Work in silence.", 
-  "Let results speak.", "Unleash the grind.", "Patterns never lie.", "Master the self.", 
-  "Break the loop.", "Refine the process.", "Obsession wins.", "Ignore the critics.", 
-  "Stay hungry.", "No easy days.", "Be the anomaly.", "Calculated execution.", "Eyes on the code.", 
-  "Think deeper.", "Fear is a ghost.", "Grind until it works.", "Optimized for success.", 
-  "The ego is a virus.", "Stay clinical.", "Zero distractions.", "Mental fortress.", 
-  "Crush the doubt.", "Beyond the limits.", "Logic above all.", "Fuel the fire.", 
-  "Pressure creates gems.", "Destroy the comfort zone.", "Stay lethal.", "Focus like a laser.", 
-  "The work is the way.", "No shortcuts.", "High stakes, high focus.", "Outwork everyone.", 
-  "Build the legacy.", "Armor the mind.", "Pure output.", "Scale the mountain.", 
-  "Stay relentless.", "Hunt the goal.", "Evolve or fail.", "Control the narrative.", 
-  "The mission is all.", "Stay dangerous.", "Iterate and improve.", "Delete the clutter.", 
-  "Upgrade the software.", "Stay sovereign.", "Logic doesn't blink.", "Earn your sleep.", 
-  "Complexity is a trap.", "Simple is lethal.", "Attack the day.", "Be the architect.", 
-  "Willpower is finite.", "Code your future.", "Live with intent.", "Master the chaos.", 
-  "Forge the path.", "Iron sharpens iron.", "Think in systems.", "Reject the average.", 
-  "Speed is an asset.", "Stay anonymous.", "Grind in the dark.", "Logic is the compass.", 
-  "No white flags.", "Power through.", "Strictly business.", "Verify everything.", 
-  "Trust the data.", "Build the empire.", "Eyes on the prize.", "Defy the odds.", 
-  "Keep moving.", "Hustle harder.", "Stay vigilant.", "Logic over luck.", "Calculated aggression.", 
-  "Refine the craft.", "Solidify the plan.", "Crush the ego.", "Evolve the mind.", 
-  "Pure efficiency.", "The goal is clear.", "Eliminate weakness.", "Standardize excellence.", 
-  "Be the storm.", "Outlast the rest.", "The clock is ticking.", "Execute the vision.", 
-  "Fortify the will.", "Logic is king.", "Success is binary.", "One task at a time.", 
-  "Stay unbreakable.", "No room for error.", "Target acquired.", "Stay focused.", 
-  "Work the plan.", "Finish the job.", "Break the chains.", "Own the outcome.", 
-  "Zero margin for error.", "Maximize potential.", "The grind is internal.", "Seek discomfort.", 
-  "Apathy is death.", "Curiosity is fuel.", "Remain detached.", "High performance only.", 
-  "Unfuck your mind.", "Master the basics.", "Build on bedrock.", "Filter the input.", 
-  "Protect the vision.", "Stay sharp, stay humble.", "Relentless pursuit.", "No plan B.", 
-  "Obsess over quality.", "Mastery takes time.", "Earn the win.", "Face the facts.", 
-  "No emotional debt.", "Stay mission-driven.", "Act with intent.", "Discipline is freedom.", 
-  "Keep your head down.", "Let the work show.", "Cut the dead weight.", "Slay the ego.", 
-  "Focus on the next rep.", "Mind like water.", "Body like iron.", "Will like steel.", 
-  "Deep work only.", "Eliminate the non-essential.", "Stay on the path.", "The obstacles are the way.", 
-  "Win from within.", "No handouts.", "Calculated persistence.", "Be your own hero.", 
-  "Logic over feelings.", "The code is life.", "Debug the routine.", "Iterate to perfection.", 
-  "Never settle.", "Keep the fire burning.", "Stay in the zone.", "Master the trade.", 
-  "Push the limit.", "Exceed expectations.", "No mercy for laziness.", "The grind is constant.", 
-  "Rise and grind.", "Make it happen.", "Stay frosty.", "Keep it moving.", "Level up.", 
-  "Be the expert.", "No excuses permitted.", "Stay intense.", "Focus on the prize.", 
-  "Earn your place.", "The future is earned.", "Work while they sleep.", "Learn while they party.", 
-  "Live like they won't.", "Win like they can't.", "Stay gritty.", "Hard work is the base.", 
-  "Execute without emotion.", "Systematic success.", "The data is king.", "Find the bug.", 
-  "Fix the bug.", "Ship the code.", "Stay proactive.", "No reactive moves.", "Anticipate the hit.", 
-  "Absorb the blow.", "Counter with logic.", "Stay steady.", "Breathe through the pressure.", 
-  "Focus on the solution.", "Problem-solving mindset.", "The truth sets the pace.", "Logic is a weapon.", 
-  "Arm yourself with knowledge.", "Read the manual.", "Master the tools.", "Be the toolmaker.", 
-  "Build the infrastructure.", "Own the system.", "Stay modular.", "Scalable growth only.", 
-  "Minimize latency.", "Optimize the path.", "Remove the friction.", "Logic is the filter.", 
-  "Stay objective at all costs.", "Truth hurts, lies kill.", "The ego is a liar.", "Silence is tactical.", 
-  "Listen more, talk less.", "Knowledge is currency.", "Spend it wisely.", "Invest in yourself.", 
-  "The compounding effect.", "Consistency wins wars.", "Discipline wins lives.", "Be the exception.", 
-  "Reject the status quo.", "Think for yourself.", "Logic is your sovereign.", "Stay centered.", 
-  "Focus on the core.", "Strip away the fluff.", "The essence is enough.", "Quality over quantity.", 
-  "Less but better.", "Precision is the goal.", "Hit the target.", "Reset and repeat.", 
-  "The loop is life.", "Refine the loop.", "Break the bad loops.", "Install the good loops.", 
-  "Software for the soul.", "Hardcore discipline.", "No compromise.", "Stay authentic.", 
-  "Logic doesn't care.", "Reality is cold.", "Warm it with work.", "Build your own world.", 
-  "Construct the reality.", "Code the dream.", "Execute the nightmare.", "Stay awake.", 
-  "Eyes open.", "Mind sharp.", "Heart cold.", "Will strong.", "Be the master.", 
-  "Slave to no one.", "Sovereign of self.", "Logic is the law.", "Control the variables.", 
-  "Minimize the risk.", "Maximize the reward.", "Calculated moves only.", "Stay tactical.", 
-  "Strategic patience.", "Aggressive execution.", "The blend is key.", "Stay balanced.", 
-  "Focus on the now.", "The past is data.", "The future is a projection.", "The present is the input.", 
-  "Input leads to output.", "Better input, better life.", "Garbage in, garbage out.", "Clean the stream.", 
-  "Logic is the filter.", "Stay pure.", "The path is narrow.", "The reward is wide.", 
-  "Stay focused on the gate.", "Open the door.", "Walk through.", "Don't look back.", 
-  "Burn the bridges.", "Only forward.", "Speed and power.", "The grind is a privilege.", 
-  "Love the struggle.", "Respect the process.", "Honor the work.", "The work is sacred.", 
-  "Stay devoted.", "Focus is a prayer.", "Execution is an offering.", "Results are the blessing.", 
-  "Stay humble in victory.", "Stay stoic in defeat.", "Logic is the anchor.", "Truth is the sail.", 
-  "Knowledge is the wind.", "Reality is the sea.", "Navigate the storm.", "Be the captain.", 
-  "Control the ship.", "Stay on course.", "No distractions on deck.", "Eyes on the horizon.", 
-  "Land is earned.", "Keep rowing.", "Logic is the rhythm.", "Stay in sync.", 
-  "Master the tempo.", "Control the speed.", "Slow is smooth.", "Smooth is fast.", 
-  "Fast is lethal.", "Stay lethal.", "Logic is the edge.", "The blade is you.", 
-  "Stay sharp.", "Cut through the noise.", "Direct hit.", "No wasted motion.", 
-  "Efficiency is beauty.", "The code is art.", "Stay artistic.", "Logic is the canvas.", 
-  "Knowledge is the paint.", "Execution is the brush.", "Reality is the masterpiece.", 
-  "Own the gallery.", "Build the legacy.", "Stay legendary.", "Logic is the myth.", 
-  "Truth is the reality.", "Knowledge is the power.", "Control is the key.", "Stay in command.", 
-  "The system is yours.", "Access granted.", "Root access only.", "Stay admin.", 
-  "No guest access.", "Protect the kernel.", "Logic is the firewall.", "Stay secure.", 
-  "Truth is the encryption.", "Knowledge is the key.", "Reality is the server.", "Keep it running.", 
-  "Zero downtime.", "Maximum uptime.", "Stay online.", "The grind never sleeps.", 
-  "Logic is the wake-up call.", "Stay alert.", "Stay awake.", "Stay caustic.", 
-  "Logic is the shield.", "Control the ego.", "Truth is absolute.", "Knowledge is light.", 
-  "Reality is a construct.", "Stay caustic.", "Action over overthinking.", "Done is better than perfect.", 
-  "Momentum builds motivation.", "Consistency > Intensity.", "Slow progress is still progress.", 
-  "Fall seven times, stand up eight.", "Win the morning, win the day.", "Discipline > Motivation.", 
-  "Don’t stop until you’re proud.", "Focus on the how, not the what if.", "Your only limit is your mind.", 
-  "Tiny habits, big results.", "Start where you are.", "Own the day.", "Logic is the shield.", 
-  "The grind continues.", "Final directive: Win."
-];
+        const fragments = [ "Logic is the shield.", "Control the ego.", "Truth is absolute.", "Knowledge is light.", "Reality is a construct.", "Stay caustic.", "Action over overthinking.", "Done is better than perfect.", "Momentum builds motivation.", "Consistency > Intensity.", "Slow progress is still progress.", "Fall seven times, stand up eight.", "Win the morning, win the day.", "Discipline > Motivation.", "Don’t stop until you’re proud.", "Focus on the how, not the what if.", "Your only limit is your mind.", "Tiny habits, big results.", "Start where you are.", "Own the day.", "Precision is power.", "Silence is an answer.", "Master the routine.", "Embrace the friction.", "Efficiency is life.", "No excuses, only data.", "Focus is a muscle.", "Adapt or expire.", "Keep the edge sharp.", "Endure and survive.", "Output over input.", "Calculated risks only.", "Emotions are variables.", "Solve the problem.", "Stay cold, stay focused.", "Victory is in the details.", "Time is the only currency.", "Kill the distractions.", "Build the machine.", "Execution is everything.", "Do not hesitate.", "Analyze, then act.", "Strength is earned.", "Hard reset the mind.", "Minimize the noise.", "Results over intentions.", "Stay objective.", "Burn the ships.", "Move with purpose.", "Game the system.", "Default to action.", "Sharpen the blade.", "Reject mediocrity.", "Entropy is the enemy.", "Seek the truth.", "Limit the chatter.", "Work in silence.", "Let results speak.", "Unleash the grind.", "Patterns never lie.", "Master the self.", "Break the loop.", "Refine the process.", "Obsession wins.", "Ignore the critics.", "Stay hungry.", "No easy days.", "Be the anomaly.", "Calculated execution.", "Eyes on the code.", "Think deeper.", "Fear is a ghost.", "Grind until it works.", "Optimized for success.", "The ego is a virus.", "Stay clinical.", "Zero distractions.", "Mental fortress.", "Crush the doubt.", "Beyond the limits.", "Logic above all.", "Fuel the fire.", "Pressure creates gems.", "Destroy the comfort zone.", "Stay lethal.", "Focus like a laser.", "The work is the way.", "No shortcuts.", "High stakes, high focus.", "Outwork everyone.", "Build the legacy.", "Armor the mind.", "Pure output.", "Scale the mountain.", "Stay relentless.", "Hunt the goal.", "Evolve or fail.", "Control the narrative.", "The mission is all.", "Stay dangerous.", "Iterate and improve.", "Delete the clutter.", "Upgrade the software.", "Stay sovereign.", "Logic doesn't blink.", "Earn your sleep.", "Complexity is a trap.", "Simple is lethal.", "Attack the day.", "Be the architect.", "Willpower is finite.", "Code your future.", "Live with intent.", "Master the chaos.", "Forge the path.", "Iron sharpens iron.", "Think in systems.", "Reject the average.", "Speed is an asset.", "Stay anonymous.", "Grind in the dark.", "Logic is the compass.", "No white flags.", "Power through.", "Strictly business.", "Verify everything.", "Trust the data.", "Build the empire.", "Eyes on the prize.", "Defy the odds.", "Keep moving.", "Hustle harder.", "Stay vigilant.", "Logic over luck.", "Calculated aggression.", "Refine the craft.", "Solidify the plan.", "Crush the ego.", "Evolve the mind.", "Pure efficiency.", "The goal is clear.", "Eliminate weakness.", "Standardize excellence.", "Be the storm.", "Outlast the rest.", "The clock is ticking.", "Execute the vision.", "Fortify the will.", "Logic is king.", "Success is binary.", "One task at a time.", "Stay unbreakable.", "No room for error.", "Target acquired.", "Stay focused.", "Work the plan.", "Finish the job.", "Break the chains.", "Own the outcome.", "Zero margin for error.", "Maximize potential.", "The grind is internal.", "Seek discomfort.", "Apathy is death.", "Curiosity is fuel.", "Remain detached.", "High performance only.", "Unfuck your mind.", "Master the basics.", "Build on bedrock.", "Filter the input.", "Protect the vision.", "Stay sharp, stay humble.", "Relentless pursuit.", "No plan B.", "Obsess over quality.", "Mastery takes time.", "Earn the win.", "Face the facts.", "No emotional debt.", "Stay mission-driven.", "Act with intent.", "Discipline is freedom.", "Keep your head down.", "Let the work show.", "Cut the dead weight.", "Slay the ego.", "Focus on the next rep.", "Mind like water.", "Body like iron.", "Will like steel.", "Deep work only.", "Eliminate the non-essential.", "Stay on the path.", "The obstacles are the way.", "Win from within.", "No handouts.", "Calculated persistence.", "Be your own hero.", "Logic over feelings.", "The code is life.", "Debug the routine.", "Iterate to perfection.", "Never settle.", "Keep the fire burning.", "Stay in the zone.", "Master the trade.", "Push the limit.", "Exceed expectations.", "No mercy for laziness.", "The grind is constant.", "Rise and grind.", "Make it happen.", "Stay frosty.", "Keep it moving.", "Level up.", "Be the expert.", "No excuses permitted.", "Stay intense.", "Focus on the prize.", "Earn your place.", "The future is earned.", "Work while they sleep.", "Learn while they party.", "Live like they won't.", "Win like they can't.", "Stay gritty.", "Hard work is the base.", "Execute without emotion.", "Systematic success.", "The data is king.", "Find the bug.", "Fix the bug.", "Ship the code.", "Stay proactive.", "No reactive moves.", "Anticipate the hit.", "Absorb the blow.", "Counter with logic.", "Stay steady.", "Breathe through the pressure.", "Focus on the solution.", "Problem-solving mindset.", "The truth sets the pace.", "Logic is a weapon.", "Arm yourself with knowledge.", "Read the manual.", "Master the tools.", "Be the toolmaker.", "Build the infrastructure.", "Own the system.", "Stay modular.", "Scalable growth only.", "Minimize latency.", "Optimize the path.", "Remove the friction.", "Logic is the filter.", "Stay objective at all costs.", "Truth hurts, lies kill.", "The ego is a liar.", "Silence is tactical.", "Listen more, talk less.", "Knowledge is currency.", "Spend it wisely.", "Invest in yourself.", "The compounding effect.", "Consistency wins wars.", "Discipline wins lives.", "Be the exception.", "Reject the status quo.", "Think for yourself.", "Logic is your sovereign.", "Stay centered.", "Focus on the core.", "Strip away the fluff.", "The essence is enough.", "Quality over quantity.", "Less but better.", "Precision is the goal.", "Hit the target.", "Reset and repeat.", "The loop is life.", "Refine the loop.", "Break the bad loops.", "Install the good loops.", "Software for the soul.", "Hardcore discipline.", "No compromise.", "Stay authentic.", "Logic doesn't care.", "Reality is cold.", "Warm it with work.", "Build your own world.", "Construct the reality.", "Code the dream.", "Execute the nightmare.", "Stay awake.", "Eyes open.", "Mind sharp.", "Heart cold.", "Will strong.", "Be the master.", "Slave to no one.", "Sovereign of self.", "Logic is the law.", "Control the variables.", "Minimize the risk.", "Maximize the reward.", "Calculated moves only.", "Stay tactical.", "Strategic patience.", "Aggressive execution.", "The blend is key.", "Stay balanced.", "Focus on the now.", "The past is data.", "The future is a projection.", "The present is the input.", "Input leads to output.", "Better input, better life.", "Garbage in, garbage out.", "Clean the stream.", "Logic is the filter.", "Stay pure.", "The path is narrow.", "The reward is wide.", "Stay focused on the gate.", "Open the door.", "Walk through.", "Don't look back.", "Burn the bridges.", "Only forward.", "Speed and power.", "The grind is a privilege.", "Love the struggle.", "Respect the process.", "Honor the work.", "The work is sacred.", "Stay devoted.", "Focus is a prayer.", "Execution is an offering.", "Results are the blessing.", "Stay humble in victory.", "Stay stoic in defeat.", "Logic is the anchor.", "Truth is the sail.", "Knowledge is the wind.", "Reality is the sea.", "Navigate the storm.", "Be the captain.", "Control the ship.", "Stay on course.", "No distractions on deck.", "Eyes on the horizon.", "Land is earned.", "Keep rowing.", "Logic is the rhythm.", "Stay in sync.", "Master the tempo.", "Control the speed.", "Slow is smooth.", "Smooth is fast.", "Fast is lethal.", "Stay lethal.", "Logic is the edge.", "The blade is you.", "Stay sharp.", "Cut through the noise.", "Direct hit.", "No wasted motion.", "Efficiency is beauty.", "The code is art.", "Stay artistic.", "Logic is the canvas.", "Knowledge is the paint.", "Execution is the brush.", "Reality is the masterpiece.", "Own the gallery.", "Build the legacy.", "Stay legendary.", "Logic is the myth.", "Truth is the reality.", "Knowledge is the power.", "Control is the key.", "Stay in command.", "The system is yours.", "Access granted.", "Root access only.", "Stay admin.", "No guest access.", "Protect the kernel.", "Logic is the firewall.", "Stay secure.", "Truth is the encryption.", "Knowledge is the key.", "Reality is the server.", "Keep it running.", "Zero downtime.", "Maximum uptime.", "Stay online.", "The grind never sleeps.", "Logic is the wake-up call.", "Stay alert.", "Stay awake.", "Stay caustic.", "Logic is the shield.", "Control the ego.", "Truth is absolute.", "Knowledge is light.", "Reality is a construct.", "Stay caustic.", "Action over overthinking.", "Done is better than perfect.", "Momentum builds motivation.", "Consistency > Intensity.", "Slow progress is still progress.", "Fall seven times, stand up eight.", "Win the morning, win the day.", "Discipline > Motivation.", "Don’t stop until you’re proud.", "Focus on the how, not the what if.", "Your only limit is your mind.", "Tiny habits, big results.", "Start where you are.", "Own the day.", "Logic is the shield.", "The grind continues.", "Final directive: Win." ];
 
         window.addEventListener('load', () => { 
             document.getElementById('loader').classList.add('loader-hidden'); 
         });
         
         function delayedLink(url) { setTimeout(() => { window.open(url, '_blank'); }, 400); }
-
         function openBooks() { document.getElementById('bookOverlay').style.display = 'flex'; }
         function closeBooks() { document.getElementById('bookOverlay').style.display = 'none'; }
         function openVault() { document.getElementById('vaultOverlay').style.display = 'flex'; }
@@ -419,19 +329,58 @@
         }
         function closeTerminal() { document.getElementById('terminalOverlay').style.display = 'none'; }
 
+        /* DIRECTIONAL RAIN BACKGROUND LOGIC */
         const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
-        let stars = [];
+        let lineArray = [];
+        let lineCount = 70;
+        let dirX = 0;
+        let dirY = 4;
+
         function resize() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            stars = [];
-            for (let i = 0; i < 75; i++) stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 1.5, vel: Math.random() * 0.2 + 0.05 });
+            canvas.width = window.innerWidth; 
+            canvas.height = window.innerHeight;
+            lineArray = [];
+            for (let i = 0; i < lineCount; i++) {
+                lineArray.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    length: Math.random() * 60 + 20,
+                    opacity: Math.random() * 0.6 + 0.2,
+                    speedMult: Math.random() * 1 + 0.5
+                });
+            }
         }
+
         function draw() {
-            ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-            stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2); ctx.fill(); s.y += s.vel; if (s.y > canvas.height) s.y = 0; });
+            ctx.fillStyle = '#050505'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            lineArray.forEach(l => {
+                ctx.strokeStyle = `rgba(220, 220, 220, ${l.opacity})`; 
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(l.x, l.y);
+                ctx.lineTo(l.x + (dirX * 5), l.y + (dirY * 5)); 
+                ctx.stroke();
+
+                l.x += dirX * l.speedMult;
+                l.y += dirY * l.speedMult;
+
+                // Wrap around screen edges
+                if (l.x > canvas.width) l.x = 0;
+                if (l.x < 0) l.x = canvas.width;
+                if (l.y > canvas.height) l.y = 0;
+                if (l.y < 0) l.y = canvas.height;
+            });
             requestAnimationFrame(draw);
         }
+
+        // Change direction on click
+        window.addEventListener('mousedown', () => {
+            dirX = (Math.random() - 0.5) * 10;
+            dirY = (Math.random() - 0.5) * 10;
+        });
+
         function updateUI() {
             const now = new Date();
             const start = new Date(now.getFullYear(), 0, 0);
@@ -441,9 +390,13 @@
             setTimeout(() => { if(document.getElementById('progressFill')) document.getElementById('progressFill').style.width = `${percent}%`; }, 500);
             document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour12: false });
         }
+
         window.addEventListener('resize', resize);
         setInterval(updateUI, 1000);
-        resize(); draw(); updateUI();
+        
+        resize(); 
+        draw(); 
+        updateUI();
     </script>
 </body>
 </html>
