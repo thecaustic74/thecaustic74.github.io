@@ -3,268 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Caustic 74 | Authentic Dua & Logic Repository</title>
-    <meta name="description" content="Global repository for Sahih Duas and Logic. Find the right Dua for every special moment.">
-    <meta name="keywords" content="Caustic 74, Dua for special moments, Sahih Hadith Bengali, Islamic Logic, Dhaka Ramadan 2026">
+    <title>The Caustic 74 | Authentic Dua & Ramadan Hub</title>
     
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="YOUR-UNIQUE-ID"></script>
+    <meta name="description" content="Authentic Sahih Duas for Ramadan and daily life. Bengali & English translations.">
+    <meta name="keywords" content="Dua for special moments, Ramadan Dhaka 2026, Iftar Time Dhaka, Sahih Dua Bengali">
 
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700;800&family=Amiri&family=Fira+Code&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;800&family=Amiri&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        :root { --bg: #030305; --accent: #6366f1; --emerald: #10b981; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
-        .font-arabic { font-family: 'Amiri', serif; font-size: 2rem; line-height: 1.8; }
-        
-        .glass-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(25px);
-            border-radius: 30px;
-            padding: 24px;
-        }
-
-        .main-bg {
-            position: fixed; inset: 0;
-            background: radial-gradient(circle at 50% -20%, #0f172a 0%, #030305 80%);
-            z-index: -1;
-        }
-
-        #vault-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98); 
-            z-index: 1000; display: none; flex-direction: column;
-            padding: 40px 24px; backdrop-blur: 40px; overflow-y: auto;
-        }
-
-        .logo-text { font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; }
-        .logo-accent { width: 4px; height: 28px; background: var(--emerald); border-radius: 4px; }
-        .flicker { transition: opacity 0.6s ease; }
-        
-        /* Tooltip for copy success */
-        #toast { visibility: hidden; min-width: 200px; background-color: #10b981; color: #fff; text-align: center; border-radius: 50px; padding: 10px; position: fixed; z-index: 2000; bottom: 100px; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: bold; }
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 100px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 100px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        :root { --bg: #030305; --emerald: #10b981; }
+        body { background: var(--bg); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-arabic { font-family: 'Amiri', serif; font-size: 2.2rem; }
+        .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(15px); border-radius: 24px; }
+        #toast { visibility: hidden; position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--emerald); padding: 10px 20px; border-radius: 50px; z-index: 1000; font-size: 12px; font-weight: bold; }
+        #toast.show { visibility: visible; animation: fadeInUp 0.5s; }
+        @keyframes fadeInUp { from { opacity: 0; bottom: 40px; } to { opacity: 1; bottom: 80px; } }
     </style>
 </head>
-<body>
+<body class="p-6 pb-32">
 
-    <div class="main-bg"></div>
-    <div id="toast">DUA COPIED TO CLIPBOARD</div>
+    <div id="toast">COPIED TO CLIPBOARD</div>
 
-    <div id="vault-overlay">
-        <div class="flex justify-between items-center mb-10">
-            <h2 class="text-xl font-bold tracking-widest uppercase text-indigo-400">LOGIC ARCHIVES</h2>
-            <button onclick="closeVault()" class="text-4xl text-gray-700">&times;</button>
+    <nav style="display:none;">
+        <a href="#ramadan">Ramadan Dua 2026</a>
+        <a href="#protection">Protection Duas</a>
+        <a href="#success">Success and Exams</a>
+    </nav>
+
+    <header class="max-w-md mx-auto flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+        <div class="flex items-center gap-3">
+            <div class="h-6 w-1 bg-emerald-500 rounded-full"></div>
+            <h1 class="text-xl font-extrabold uppercase tracking-widest">Caustic<span class="text-gray-500 font-light">74</span></h1>
         </div>
-        <div class="space-y-4 pb-20" id="logic-list"></div>
-    </div>
+        <div class="text-right font-mono">
+            <p id="clock" class="text-xs font-bold text-emerald-400">00:00:00</p>
+            <span id="geo" class="text-[6px] text-gray-500 uppercase tracking-widest">Detecting...</span>
+        </div>
+    </header>
 
-    <main class="max-w-[450px] mx-auto px-6 pt-10 pb-44 space-y-6">
+    <section id="ramadan" class="max-w-md mx-auto glass p-6 mb-6 border-t-2 border-amber-500/20 text-center">
+        <div class="flex justify-between items-center mb-4">
+            <span class="text-[8px] font-black text-amber-500 uppercase tracking-widest">Dhaka Iftar Sequence</span>
+            <i class="fas fa-moon text-amber-500/50 text-xs"></i>
+        </div>
+        <h2 id="timer" class="text-5xl font-mono font-black mb-2">00:00:00</h2>
+        <p class="text-[9px] text-gray-500 uppercase font-bold">Estimated Time Remaining</p>
+    </section>
+
+    <section class="max-w-md mx-auto glass p-8 relative">
+        <button onclick="copyContent()" class="absolute top-6 right-6 text-gray-600 hover:text-emerald-400"><i class="far fa-copy"></i></button>
+        <span id="moment-tag" class="text-[8px] font-bold text-emerald-500 uppercase tracking-widest">Starting Sequence</span>
         
-        <header class="flex justify-between items-center border-b border-white/5 pb-6">
-            <div class="flex items-center gap-4">
-                <div class="logo-accent"></div>
-                <div>
-                    <h1 class="logo-text text-xl">Caustic<span class="text-gray-500 font-light ml-1">74</span></h1>
-                    <p id="user-location" class="text-[7px] font-mono text-emerald-500/50 uppercase tracking-[0.5em] mt-1">Detecting_Node...</p>
-                </div>
-            </div>
-            <div class="text-right">
-                <p id="live-clock" class="text-sm font-bold font-mono text-gray-300">00:00:00</p>
-                <span class="text-[7px] text-emerald-500 font-bold uppercase tracking-widest">Global_Sync</span>
-            </div>
-        </header>
-
-        <section class="glass-card border-t-2 border-amber-500/20">
-            <div class="flex justify-between items-center mb-2">
-                <span id="meal-label" class="text-[8px] font-black uppercase text-amber-500 tracking-[0.3em]">Next_Sequence</span>
-                <span class="text-[7px] text-gray-600 font-mono">DHAKA_STD</span>
-            </div>
-            <h2 id="countdown" class="text-5xl font-mono font-black text-center tracking-tighter">00:00:00</h2>
-        </section>
-
-        <section class="glass-card border-l-4 border-emerald-500/40 relative">
-            <button onclick="copyDua()" class="absolute top-4 right-4 text-gray-600 hover:text-emerald-400 transition-colors">
-                <i class="far fa-copy text-sm"></i>
-            </button>
-            <div class="mb-8">
-                <span id="dua-moment" class="text-[8px] font-black uppercase text-emerald-500 tracking-widest italic">General Guidance</span>
-            </div>
-
-            <div id="content-area" class="text-center space-y-8 min-h-[280px]">
-                <p id="dua-ar" class="font-arabic text-emerald-400" dir="rtl">اللَّهُمَّ اهْدِنِي وَسَدِّدْنِي</p>
-                <div class="space-y-4">
-                    <p id="dua-bn" class="text-sm font-bold text-gray-200 leading-relaxed px-2">হে আল্লাহ! আমাকে হেদায়েত দিন এবং সঠিক পথে পরিচালিত করুন।</p>
-                    <p id="dua-en" class="text-[11px] text-gray-500 italic px-4">"O Allah, guide me and keep me on the right path."</p>
-                </div>
-                <div class="inline-block px-5 py-2 bg-white/5 rounded-full border border-white/5">
-                    <p id="dua-ref" class="text-[7px] font-mono text-gray-500 uppercase tracking-widest italic">Muslim #2725</p>
-                </div>
-            </div>
-
-            <button onclick="syncNewData()" class="w-full mt-10 py-5 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl text-[9px] font-black uppercase tracking-[0.4em] text-emerald-500 hover:bg-emerald-500/10 active:scale-95 transition-all">
-                Generate_Dua
-            </button>
-        </section>
-
-        <section class="glass-card bg-indigo-500/5 border-indigo-500/10 py-4">
-            <div class="flex items-center gap-2 mb-2">
-                <div class="w-1 h-1 rounded-full bg-indigo-500 animate-ping"></div>
-                <span class="text-[7px] font-black uppercase text-indigo-400 tracking-[0.4em]">Logic_Pulse</span>
-            </div>
-            <p id="logic-pulse" class="text-[10px] font-mono text-indigo-300/80 italic flicker">"Observe everything, react to nothing."</p>
-        </section>
-
-        <div onclick="openVault()" class="glass-card flex justify-between items-center cursor-pointer group">
-            <div>
-                <span class="text-[8px] font-black uppercase text-gray-500 tracking-widest">Repository</span>
-                <h3 class="text-sm font-bold uppercase tracking-widest group-hover:text-indigo-400">Access_Vault</h3>
-            </div>
-            <i class="fas fa-folder-open text-gray-700 group-hover:text-indigo-400"></i>
+        <div id="content-box" class="mt-8 text-center transition-opacity duration-300">
+            <p id="ar" class="font-arabic text-emerald-400 mb-6" dir="rtl">اللَّهُمَّ بَارِكْ لَنَا فِي رَمَضَانَ</p>
+            <p id="bn" class="text-sm font-bold text-gray-200 mb-4 px-2">হে আল্লাহ! আমাদের জন্য রমজানকে বরকতময় করুন।</p>
+            <p id="en" class="text-[10px] text-gray-500 italic mb-6">"O Allah, bless us in the month of Ramadan."</p>
+            <span id="ref" class="text-[7px] font-mono text-gray-600 border border-white/5 px-3 py-1 rounded-full italic">Ahmad #2345</span>
         </div>
 
-    </main>
+        <button onclick="generate()" class="w-full mt-10 py-5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-[10px] font-black uppercase tracking-[0.4em] text-emerald-400 active:scale-95 transition-all">
+            Generate_Dua
+        </button>
+    </section>
 
-    <footer class="fixed bottom-0 left-0 w-full p-8 z-[500] bg-gradient-to-t from-black via-black/90 to-transparent">
-        <div class="max-w-[400px] mx-auto glass-card flex justify-around items-center py-5 border-white/5">
-            <a href="https://instagram.com/thecaustic74" target="_blank" class="text-gray-500 hover:text-white transition-all text-xl"><i class="fab fa-instagram"></i></a>
-            <div class="w-px h-6 bg-white/10"></div>
-            <a href="https://discord.com/users/1452742087303762054" target="_blank" class="text-gray-500 hover:text-white transition-all text-xl"><i class="fab fa-discord"></i></a>
-        </div>
-    </footer>
+    <section class="max-w-md mx-auto glass p-4 mt-6 bg-indigo-500/5 border-indigo-500/10">
+        <p id="logic-pulse" class="text-[10px] font-mono text-indigo-300 text-center italic">"Observe everything, react to nothing."</p>
+    </section>
 
     <script>
-        // --- DATA HUB (FIRST 100 ENTRIES INTEGRATED) ---
-        const islamicData = [ 
-            
-    { ar: "رَبِّ اشْرَحْ لِي صَدْرِي", bn: "হে আমার পালনকর্তা, আমার বক্ষ প্রশস্ত করে দিন।", en: "My Lord, expand for me my breast.", ref: "Taha 20:25", m: "Dua for Confidence & Speaking" },
-    { ar: "اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ", bn: "হে আল্লাহ! আপনার হালাল রিজিক আমার জন্য যথেষ্ট করুন হারাম থেকে বাঁচিয়ে।", en: "O Allah, suffice me with what is lawful instead of what is forbidden.", ref: "Tirmidhi #3563", m: "Dua for Wealth & Halal Earnings" },
-    { ar: "اللَّهُمَّ رَبَّ النَّاسِ أَذْهِبِ الْبَاسَ", bn: "হে মানুষের প্রতিপালক! কষ্ট দূর করে দিন এবং আরোগ্য দান করুন।", en: "O Lord of mankind, remove the hardship and grant healing.", ref: "Bukhari #5743", m: "Dua for Shifa & Health" },
-    { ar: "رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا قُرَّةَ أَعْيُنٍ", bn: "হে আমাদের পালনকর্তা! আমাদের পরিবারকে আমাদের জন্য নয়নপ্রীতিকর করুন।", en: "Our Lord, grant us comfort in our families.", ref: "Al-Furqan 25:74", m: "Dua for Marriage & Family" },
-    { ar: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ", bn: "হে আল্লাহ! আমি আপনার কাছে দুশ্চিন্তা ও দুঃখ থেকে পানাহ চাই।", en: "O Allah, I seek refuge in You from anxiety and sorrow.", ref: "Bukhari #6369", m: "Dua for Anxiety & Depression" },
-    { ar: "رَبِّ إِنِّي لِمَا أَنزَلْتَ إِلَيَّ مِنْ خَيْرٍ فَقِيرٌ", bn: "হে আমার পালনকর্তা, আপনার পক্ষ থেকে আসা কল্যাণের আমি মুখাপেক্ষী।", en: "My Lord, I am in need of whatever good You send down.", ref: "Al-Qasas 28:24", m: "Dua for Needs & Job Search" },
-    { ar: "لَا إِلَهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ", bn: "আপনি ছাড়া কোনো উপাস্য নেই, আপনি পবিত্র, নিশ্চয়ই আমি অপরাধী।", en: "There is no deity except You; exalted are You. Indeed, I have been of the wrongdoers.", ref: "Al-Anbiya 21:87", m: "Dua for Forgiveness & Relief" },
-    { ar: "اللَّهُمَّ لَا سَهْلَ إِلَّا مَا جَعَلْتَهُ سَهْلًا", bn: "হে আল্লাহ! আপনি যা সহজ করেছেন তা ছাড়া কোনো কিছুই সহজ নয়।", en: "O Allah, there is nothing easy except what You make easy.", ref: "Ibn Hibban", m: "Dua for Hard Tasks & Exams" },
-    { ar: "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ", bn: "আল্লাহই আমাদের জন্য যথেষ্ট এবং তিনিই শ্রেষ্ঠ কর্মবিধায়ক।", en: "Sufficient for us is Allah, and He is the best Disposer of affairs.", ref: "Al-Imran 3:173", m: "Dua for Protection & Fear" }
-    { ar: "رَبِّ هَبْ لِي مِن لَّدُنكَ ذُرِّيَّةً طَيِّبَةً", bn: "হে আমার পালনকর্তা! আপনার পক্ষ থেকে আমাকে পুত-পবিত্র সন্তান দান করুন।", en: "My Lord, grant me from Yourself a good offspring.", ref: "Al-Imran 3:38", m: "Dua for Children & Family" },
-    { ar: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ", bn: "হে আল্লাহ! আমি আপনার কাছে কবরের আযাব থেকে পানাহ চাই।", en: "O Allah, I seek refuge in You from the punishment of the grave.", ref: "Muslim #588", m: "Protection from the Grave" },
-    { ar: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", bn: "আল্লাহর পবিত্রতা ঘোষণা করছি তাঁর প্রশংসার সাথে।", en: "Glory be to Allah and His is the praise.", ref: "Bukhari #6405", m: "Morning & Evening Adhkar" },
-    { ar: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى", bn: "হে আল্লাহ, আমি আপনার কাছে হেদায়েত ও তাকওয়া প্রার্থনা করছি।", en: "O Allah, I ask You for guidance and piety.", ref: "Muslim #2721", m: "Spiritual Growth" },
-    { ar: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِن شَرِّ مَا خَلَقَ", bn: "আল্লাহর পরিপূর্ণ কালেমাসমূহের অসিলায় আমি তাঁর সৃষ্টির অনিষ্ট থেকে পানাহ চাই।", en: "I seek refuge in the perfect words of Allah from the evil of what He has created.", ref: "Muslim #2708", m: "Protection from Evil Eye" },
-    { ar: "اللَّهُمَّ بَاڕِكْ لَنَا فِي رَمَضَانَ", bn: "হে আল্লাহ! রমজানে আমাদের জন্য বরকত দান করুন।", en: "O Allah, bless us in Ramadan.", ref: "Musnad Ahmad", m: "Ramadan Special" },
-    { ar: "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ", bn: "হে আল্লাহ! আমি আপনার কাছে ইহকাল ও পরকালের নিরাপত্তা প্রার্থনা করছি।", en: "O Allah, I ask You for well-being in this world and the Hereafter.", ref: "Abu Dawud #5074", m: "Safety & Well-being" },
-    { ar: "رَبَّنَا تَقَبَّلْ مِنَّا إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ", bn: "হে আমাদের পালনকর্তা! আমাদের পক্ষ থেকে এটি কবুল করুন; নিশ্চয়ই আপনি সর্বশ্রোতা, সর্বজ্ঞ।", en: "Our Lord, accept [this] from us. Indeed You are the Hearing, the Knowing.", ref: "Al-Baqarah 2:127", m: "After Good Deeds" },
-    { ar: "اللَّهُمَّ بَاعِدْ بَيْنِي وَبَيْنَ خَطَايَايَ", bn: "হে আল্লাহ! আমার এবং আমার গুনাহের মধ্যে দূরত্ব তৈরি করে দিন।", en: "O Allah, set me apart from my sins.", ref: "Bukhari #744", m: "Dua for Repentance" },
-    { ar: "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ", bn: "হে অন্তরের পরিবর্তনকারী, আমার অন্তরকে আপনার দ্বীনের ওপর অবিচল রাখুন।", en: "O Turner of the hearts, keep my heart steadfast upon Your religion.", ref: "Tirmidhi #2140", m: "Faith & Firmness" },
-    { ar: "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ", bn: "হে আল্লাহ! আপনার জিকির ও শুকরিয়া আদায়ে আমাকে সাহায্য করুন।", en: "O Allah, help me in remembering You and thanking You.", ref: "Abu Dawud #1522", m: "Post-Prayer Remembrance" },
-    { ar: "اللَّهُمَّ رَبَّ السَّمَوَاتِ وَرَبَّ الأَرْضِ", bn: "হে আল্লাহ! আসমান ও জমিনের পালনকর্তা।", en: "O Allah, Lord of the heavens and Lord of the earth.", ref: "Muslim #2713", m: "Recognition of Power" },
-    { ar: "رَبِّ اغْفِرْ لِي وَارْحَمْنِي وَاهْدِنِي", bn: "হে আমার প্রতিপালক! আমাকে ক্ষমা করুন, দয়া করুন এবং হেদায়েত দিন।", en: "My Lord, forgive me, have mercy on me, and guide me.", ref: "Ibn Majah #897", m: "Dua Between Sajdah" },
-    { ar: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ زَوَالِ نِعْمَتِكَ", bn: "হে আল্লাহ! আমি আপনার কাছে আপনার নেয়ামত চলে যাওয়া থেকে পানাহ চাই।", en: "O Allah, I seek refuge in You from the withdrawal of Your blessing.", ref: "Muslim #2739", m: "Dua for Stability" },
-    { ar: "سُبْحَانَ اللَّهِ الْعَظِيمِ وَبِحَمْدِهِ", bn: "মহিমান্বিত আল্লাহর পবিত্রতা ঘোষণা করছি তাঁর সকল প্রশংসার সাথে।", en: "Glory be to Allah, the Magnificent, and with His praise.", ref: "Tirmidhi #3464", m: "Short Heavy Adhkar" }
-
-
+        // MASSIVE REPOSITORY
+        const d = [
+            { ar: "اللَّهُمَّ بَلِّغْنَا رَمَضَانَ", bn: "হে আল্লাহ! আমাদের রমজান পর্যন্ত পৌঁছে দিন।", en: "O Allah, let us reach Ramadan.", ref: "Tabarani", m: "Ramadan Preparation" },
+            { ar: "ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ", bn: "পিপাসা দূর হলো, শিরাগুলো সিক্ত হলো এবং পুরস্কার নিশ্চিত হলো।", en: "Thirst has gone, the arteries are moist, and the reward is sure.", ref: "Abu Dawud #2357", m: "Iftar Moment" },
+            { ar: "اللَّهُمَّ إِنِّي لَكَ صُمْتُ", bn: "হে আল্লাহ! আমি আপনারই জন্য রোজা রেখেছি।", en: "O Allah, I fasted for You.", ref: "Abu Dawud", m: "Iftar Moment" },
+            { ar: "رَبِّ زِدْنِي عِلْمًا", bn: "হে আমার প্রতিপালক! আমার জ্ঞান বৃদ্ধি করে দিন।", en: "My Lord, increase me in knowledge.", ref: "Taha 20:114", m: "Dua for Students" }
         ];
 
-        const logicVault = [
-    "Truth is the only medicine for a diseased ego.",
-    "Observation is more valuable than conversation.",
-    "Privacy is power; what people don't know, they can't ruin.",
-    "The world rewards results, not intentions.",
-    "Small minds discuss people; great minds discuss ideas.",
-    "Logic is the only weapon that requires no ammunition, only clarity.",
-    "A diseased ego views medicine as an insult.",
-    "Control your variables, or they will control your life.",
-    "Silence is a tactical advantage; fools broadcast their moves.",
-    "Consistency beats intensity every single time.",
-    "Emotional decisions are the enemies of strategic victories.",
-    "Focus on the process, and the result will take care of itself.",
-    "He who masters himself is mightier than he who conquers a city.",
-    "Observe everything, react to nothing.",
-    "Calculated risks are the foundations of growth.",
-    "The loudest person in the room is usually the weakest.",
-    "Knowledge without application is just noise.",
-    "Discipline is the bridge between goals and accomplishment.",
-    "Your value is defined by the problems you solve.",
-    "Build in the dark so they can't see what to sabotage.",
-    "The best revenge is massive success.",
-    "Do not let the same dog bite you twice.",
-    "Stay hungry, stay humble, and stay private.",
-    "Comparison is the thief of joy.",
-    "If you want to be powerful, educate yourself.",
-    "The eyes are useless when the mind is blind.",
-    "Work in silence; let your success be your noise.",
-    "Stay focused on the mission, not the noise.",
-    "A wise man learns more from his enemies than a fool from his friends.",
-    "The truth does not require your opinion to exist."
-    "Logic is the only weapon that requires no ammunition, only clarity.",
-    "A diseased ego views medicine as an insult.",
-    "Silence is a tactical advantage in a noisy world.",
-    "Observe everything, react to nothing.",
-    "Truth does not require your opinion to exist."
-        ];
+        const l = ["Truth is the only medicine.", "Privacy is power.", "Consistency beats intensity."];
 
-        // --- ENGINES ---
-        function updateTime() {
+        // TIMER ENGINE
+        function initEngine() {
             const now = new Date();
-            const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            document.getElementById('user-location').innerText = zone.replace('_', ' ');
-            document.getElementById('live-clock').innerText = now.toTimeString().split(' ')[0];
-
-            let target = new Date(); target.setHours(18, 5, 0); // Dhaka/User Iftar Est
+            document.getElementById('clock').innerText = now.toLocaleTimeString('en-GB');
+            
+            // TARGET: 6:15 PM Dhaka
+            let target = new Date();
+            target.setHours(18, 15, 0); 
             if (now > target) target.setDate(target.getDate() + 1);
+
             let diff = target - now;
-            const h = Math.floor(diff/3600000).toString().padStart(2,'0');
-            const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
-            const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-            document.getElementById('countdown').innerText = `${h}:${m}:${s}`;
+            let h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+            let m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+            let s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+            document.getElementById('timer').innerText = `${h}:${m}:${s}`;
+            
+            const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            document.getElementById('geo').innerText = `Node_${zone.split('/')[1] || 'Dhaka'}_Active`;
         }
-        setInterval(updateTime, 1000);
 
-        let lIdx = 0;
-        setInterval(() => {
-            const pulse = document.getElementById('logic-pulse');
-            pulse.style.opacity = '0';
+        function generate() {
+            const box = document.getElementById('content-box');
+            box.style.opacity = '0';
             setTimeout(() => {
-                lIdx = (lIdx + 1) % logicVault.length;
-                pulse.innerText = `"${logicVault[lIdx]}"`;
-                pulse.style.opacity = '1';
-            }, 600);
-        }, 30000);
-
-        function syncNewData() {
-            const area = document.getElementById('content-area');
-            area.classList.add('flicker');
-            area.style.opacity = '0';
-            setTimeout(() => {
-                const data = islamicData[Math.floor(Math.random() * islamicData.length)];
-                document.getElementById('dua-ar').innerText = data.ar;
-                document.getElementById('dua-bn').innerText = data.bn;
-                document.getElementById('dua-en').innerText = data.en;
-                document.getElementById('dua-ref').innerText = data.ref;
-                document.getElementById('dua-moment').innerText = data.m;
-                area.style.opacity = '1';
+                const item = d[Math.floor(Math.random() * d.length)];
+                document.getElementById('ar').innerText = item.ar;
+                document.getElementById('bn').innerText = item.bn;
+                document.getElementById('en').innerText = item.en;
+                document.getElementById('ref').innerText = item.ref;
+                document.getElementById('moment-tag').innerText = item.m;
+                box.style.opacity = '1';
             }, 200);
         }
 
-        function copyDua() {
-            const ar = document.getElementById('dua-ar').innerText;
-            const bn = document.getElementById('dua-bn').innerText;
-            const ref = document.getElementById('dua-ref').innerText;
-            const text = `${ar}\n\n${bn}\nSource: ${ref}\nGenerated by Caustic 74`;
+        function copyContent() {
+            const text = `${document.getElementById('ar').innerText}\n${document.getElementById('bn').innerText}\nCaustic 74 Repository`;
             navigator.clipboard.writeText(text);
-            const t = document.getElementById("toast");
+            const t = document.getElementById('toast');
             t.className = "show";
-            setTimeout(()=>{ t.className = t.className.replace("show", ""); }, 3000);
+            setTimeout(() => { t.className = ""; }, 3000);
         }
 
-        function openVault() {
-            const overlay = document.getElementById('vault-overlay');
-            const list = document.getElementById('logic-list');
-            list.innerHTML = logicVault.map(l => `<div class="glass-card py-4 border-l-2 border-indigo-500/30"><p class="text-[11px] font-mono text-indigo-100 italic">"${l}"</p></div>`).join('');
-            overlay.style.display = 'flex';
-        }
-        function closeVault() { document.getElementById('vault-overlay').style.display = 'none'; }
+        setInterval(initEngine, 1000);
+        initEngine();
     </script>
+</body>
+</html>
+
