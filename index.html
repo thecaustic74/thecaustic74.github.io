@@ -62,7 +62,7 @@ here<!DOCTYPE html>
 
             <div class="space-y-4">
                 
-                <button onclick="openDua()" class="glass w-full p-6 border-l-4 border-emerald-500 flex items-center justify-between group">
+                <button onclick="triggerHaptic('success'); openDua();" class="glass w-full p-6 border-l-4 border-emerald-500 flex items-center justify-between group">
                     <div class="flex items-center gap-4">
                         <i class="fas fa-moon text-emerald-500 text-xl"></i>
                         <span class="btn-text uppercase text-emerald-400">Authentic_Dua</span>
@@ -78,15 +78,15 @@ here<!DOCTYPE html>
                     <i class="fas fa-bolt text-[10px] text-indigo-400"></i>
                 </button>
 
-                <div onclick="delayedLink('https://www.instagram.com/thecaustic74')" class="glass p-4 flex items-center justify-between">
+                <div onclick="triggerHaptic('light'); delayedLink('https://www.instagram.com/thecaustic74')" class="glass p-4 flex items-center justify-between">
                     <div class="flex items-center gap-3"><i class="fab fa-instagram text-lg"></i><span class="btn-text uppercase">Instagram</span></div>
                     <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
                 </div>
-                <div onclick="delayedLink('https://myanimelist.net/profile/thecaustic74')" class="glass p-4 flex items-center justify-between">
+                <div onclick="triggerhaptic('light'); delayedLink('https://myanimelist.net/profile/thecaustic74')" class="glass p-4 flex items-center justify-between">
                     <div class="flex items-center gap-3"><i class="fas fa-play-circle text-[#2e51a2] text-lg"></i><span class="btn-text uppercase">MyAnimeList</span></div>
                     <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
                 </div>
-                <div onclick="delayedLink('https://discord.com/users/1452742087303762054')" class="glass p-4 flex items-center justify-between">
+                <div onclick="triggerhaptic('light'); delayedLink('https://discord.com/users/1452742087303762054')" class="glass p-4 flex items-center justify-between">
                     <div class="flex items-center gap-3"><i class="fab fa-discord text-[#5865F2] text-lg"></i><span class="btn-text uppercase">Discord</span></div>
                     <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
                 </div>
@@ -103,7 +103,7 @@ here<!DOCTYPE html>
             <span id="dua-tag" class="text-[8px] font-bold text-emerald-500 uppercase tracking-widest">Awaiting Sync</span>
             <p id="dua-ar" class="font-arabic text-2xl mt-8 mb-6 text-white leading-loose">---</p>
             <p id="dua-bn" class="text-xs text-gray-400 leading-relaxed italic">Fetch from database</p>
-            <button onclick="generateFromJSON()" class="w-full mt-10 py-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-[9px] font-black uppercase tracking-[0.3em] text-emerald-400 hover:bg-emerald-500/20">Execute_Fetch</button>
+            <button onclick="triggerHaptic('success'); generateFromJSON();" class="w-full mt-10 ...">Next_Dua</button>
         </div>
     </div>
 
@@ -226,6 +226,17 @@ here<!DOCTYPE html>
 
         window.addEventListener('resize', resize);
         window.addEventListener('load', () => { document.getElementById('loader').classList.add('loader-hidden'); resize(); draw(); loadData(); updateUI(); setInterval(updateUI, 1000); });
+    // This is the engine that handles the vibration
+function triggerHaptic(type) {
+    if (!navigator.vibrate) return; // Skip if the phone doesn't support it
+
+    if (type === 'light') {
+        navigator.vibrate(15); // Short tap for regular buttons
+    } else if (type === 'success') {
+        navigator.vibrate([25, 40, 25]); // Double tap for the Dua Generator
+    }
+}
+
     </script>
 </body>
 </html>
