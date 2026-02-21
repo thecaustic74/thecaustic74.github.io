@@ -1,154 +1,45 @@
-<!DOCTYPE html>
+here<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <script async src="https://cloud.umami.is/script.js" data-website-id="d61360dd-54f0-45d4-8ad1-ca220ae33e6b"></script>    
-
     <style>
-        html, body { 
-            background-color: #050505; 
-            margin: 0; 
-            padding: 0; 
-            color: #ffffff;
-            /* Ensure the body allows clicking the background */
-            min-height: 100vh;
-        }
-
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #050505;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.4s ease-out, visibility 0.4s;
-        }
-
+        html, body { background-color: #050505; margin: 0; padding: 0; color: #ffffff; min-height: 100vh; }
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.4s ease-out, visibility 0.4s; }
         .loader-content { text-align: center; font-family: 'Inter', sans-serif; }
-        
-        .spinner {
-            width: 30px;
-            height: 30px;
-            border: 2px solid rgba(99, 102, 241, 0.1);
-            border-top: 2px solid #6366f1;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 15px;
-        }
-
-        .loader-text {
-            color: #6366f1;
-            font-size: 9px;
-            font-weight: 900;
-            letter-spacing: 0.4em;
-            text-transform: uppercase;
-            animation: pulse 1.7s infinite;
-        }
-
+        .spinner { width: 30px; height: 30px; border: 2px solid rgba(99, 102, 241, 0.1); border-top: 2px solid #6366f1; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        .loader-text { color: #6366f1; font-size: 9px; font-weight: 900; letter-spacing: 0.4em; text-transform: uppercase; animation: pulse 1.7s infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
         .loader-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     </style>
 
     <title>The Caustic 74 | Live</title>
-    <meta name="title" content="The Caustic 74">
-    <meta name="description" content="Digital repository of history, logic, and resilience.">
-    
-    <meta property="og:title" content="The Caustic 74 | Live">
-    <meta property="og:description" content="Digital repository of history, logic, and resilience.">
-    <meta property="og:image" content="favicon.webp">
-    
     <link rel="icon" type="image/webp" href="favicon.webp">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Fira+Code:wght@400&family=Amiri&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
         body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        
-        /* New Background Styling */
-        #canvas { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100vw; 
-            height: 100vh; 
-            z-index: 0; 
-            background: #050505;
-        }
-        
-        .content-wrapper { 
-            position: relative; 
-            z-index: 10; 
-            width: 100%; 
-            min-height: 100dvh; 
-            display: flex; 
-            justify-content: center; 
-            padding: 80px 24px 120px 24px; 
-            /* Let clicks pass through empty space to the canvas */
-            pointer-events: none; 
-        }
-
-        /* Re-enable pointer events for the actual interactive content */
-        .content-wrapper > div, .vault-trigger, #vaultOverlay, #bookOverlay, #terminalOverlay {
-            pointer-events: auto;
-        }
-
-        .glass { 
-            background: rgba(255, 255, 255, 0.03); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(15px); 
-            border-radius: 20px; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            cursor: pointer;
-        }
-
-        .glass:hover { 
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.6);
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.4);
-        }
-
-        .vault-trigger {
-            position: fixed; top: 25px; left: 25px; z-index: 200;
-            display: flex; align-items: center; gap: 10px; cursor: pointer;
-            opacity: 0.6; transition: 0.3s;
-        }
+        #canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; background: #050505; }
+        .content-wrapper { position: relative; z-index: 10; width: 100%; min-height: 100dvh; display: flex; justify-content: center; padding: 60px 24px 120px 24px; pointer-events: none; }
+        .content-wrapper > div, .vault-trigger, #vaultOverlay, #bookOverlay, #terminalOverlay, #duaOverlay { pointer-events: auto; }
+        .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 20px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
+        .glass:hover { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.2); transform: translateY(-4px); }
+        .vault-trigger { position: fixed; top: 25px; left: 25px; z-index: 200; display: flex; align-items: center; gap: 10px; cursor: pointer; opacity: 0.6; transition: 0.3s; }
         .vault-trigger:hover { opacity: 1; color: #6366f1; }
-
-        #vaultOverlay, #bookOverlay, #terminalOverlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.98); backdrop-filter: blur(30px); 
-            z-index: 500; display: none; flex-direction: column; align-items: center; 
-            padding: 40px 20px; overflow-y: auto; 
-        }
-
-        #terminalOverlay { z-index: 1000; background: rgba(5,5,5,0.99); justify-content: center; }
-        #terminal-text { font-family: 'Fira Code', monospace; color: #6366f1; text-align: center; max-width: 400px; }
-
+        #vaultOverlay, #bookOverlay, #terminalOverlay, #duaOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(30px); z-index: 500; display: none; flex-direction: column; align-items: center; padding: 40px 20px; overflow-y: auto; }
+        .font-arabic { font-family: 'Amiri', serif; }
         .btn-text { letter-spacing: 0.15em; font-size: 0.75rem; font-weight: 700; }
         .progress-bg { background: rgba(255,255,255,0.05); height: 4px; border-radius: 10px; overflow: hidden; width: 120px; margin: 8px auto; }
         .progress-fill { background: linear-gradient(90deg, #6366f1, #a5b4fc); height: 100%; width: 0%; transition: width 1.5s ease-in-out; }
         .num-icon { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; border: 1px solid rgba(255,255,255,0.2); }
-        .fa-instagram { background: -webkit-linear-gradient(#f9ce34, #ee2a7b, #6228d7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     </style>
 </head>
 <body>
-    <div id="loader">
-        <div class="loader-content">
-            <div class="spinner"></div>
-            <div class="loader-text">SUIIIIIIIIIIIIIIIIIIIIIIIIIII</div>
-        </div>
-    </div>
+    <div id="loader"><div class="loader-content"><div class="spinner"></div><div class="loader-text">SUIIIIIIIIIIIIIIIIIIIIIIIIIII</div></div></div>
 
     <div class="vault-trigger" onclick="openVault()">
         <i class="fas fa-bars text-xl"></i>
@@ -168,15 +59,17 @@
                 </div>
                 <div id="clock" class="text-[11px] font-mono text-gray-500 mt-2">00:00:00</div>
             </div>
-            
-            <div class="text-center mb-8 px-6">
-                <p class="text-[11px] text-gray-400 italic leading-relaxed tracking-wide font-medium">
-                    "It is better to be hated for who you are than to be loved for someone you are not."
-                </p>
-                <div class="h-[1px] w-6 bg-indigo-500/40 mx-auto mt-4"></div>
-            </div>
 
             <div class="space-y-4">
+                
+                <button onclick="openDua()" class="glass w-full p-6 border-l-4 border-emerald-500 flex items-center justify-between group">
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-moon text-emerald-500 text-xl"></i>
+                        <span class="btn-text uppercase text-emerald-400">Authentic_Dua</span>
+                    </div>
+                    <i class="fas fa-sparkles text-[10px] text-emerald-500"></i>
+                </button>
+
                 <button onclick="runTerminal()" class="glass w-full p-6 flex items-center justify-between group border-dashed border-indigo-500/40">
                     <div class="flex items-center gap-4">
                         <i class="fas fa-terminal text-indigo-500 text-xl"></i>
@@ -186,115 +79,100 @@
                 </button>
 
                 <div onclick="delayedLink('https://www.instagram.com/thecaustic74')" class="glass p-4 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <i class="fab fa-instagram text-lg"></i>
-                        <span class="btn-text uppercase">Instagram</span>
-                    </div>
+                    <div class="flex items-center gap-3"><i class="fab fa-instagram text-lg"></i><span class="btn-text uppercase">Instagram</span></div>
                     <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
                 </div>
-
                 <div onclick="delayedLink('https://myanimelist.net/profile/thecaustic74')" class="glass p-4 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-play-circle text-[#2e51a2] text-lg"></i>
-                        <span class="btn-text uppercase">MyAnimeList</span>
-                    </div>
+                    <div class="flex items-center gap-3"><i class="fas fa-play-circle text-[#2e51a2] text-lg"></i><span class="btn-text uppercase">MyAnimeList</span></div>
                     <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
                 </div>
-                
                 <div onclick="delayedLink('https://discord.com/users/1452742087303762054')" class="glass p-4 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <i class="fab fa-discord text-[#5865F2] text-lg"></i>
-                        <span class="btn-text uppercase">Discord</span>
-                    </div>
+                    <div class="flex items-center gap-3"><i class="fab fa-discord text-[#5865F2] text-lg"></i><span class="btn-text uppercase">Discord</span></div>
                     <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="duaOverlay">
+        <div class="w-full max-w-xs flex justify-between items-center mb-10">
+            <h2 class="text-lg font-black tracking-widest uppercase text-emerald-500">Repository</h2>
+            <button onclick="closeDua()" class="text-white text-4xl">&times;</button>
+        </div>
+        <div class="glass w-full max-w-sm p-8 text-center border-emerald-500/20">
+            <span id="dua-tag" class="text-[8px] font-bold text-emerald-500 uppercase tracking-widest">Awaiting Sync</span>
+            <p id="dua-ar" class="font-arabic text-2xl mt-8 mb-6 text-white leading-loose">---</p>
+            <p id="dua-bn" class="text-xs text-gray-400 leading-relaxed italic">Fetch from database</p>
+            <button onclick="generateFromJSON()" class="w-full mt-10 py-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-[9px] font-black uppercase tracking-[0.3em] text-emerald-400 hover:bg-emerald-500/20">Execute_Fetch</button>
         </div>
     </div>
 
     <div id="vaultOverlay">
-        <div class="w-full max-w-xs flex justify-between items-center mb-10">
-            <h2 class="text-lg font-black tracking-widest uppercase">The Vault</h2>
-            <button onclick="closeVault()" class="text-white text-4xl">&times;</button>
-        </div>
-
+        <div class="w-full max-w-xs flex justify-between items-center mb-10"><h2 class="text-lg font-black tracking-widest uppercase">The Vault</h2><button onclick="closeVault()" class="text-white text-4xl">&times;</button></div>
         <div onclick="openBooks()" class="glass w-full p-6 mb-8 flex items-center justify-between group">
-            <div class="flex items-center gap-4">
-                <i class="fas fa-book text-indigo-500 text-xl"></i>
-                <span class="btn-text uppercase">The Archives</span>
-            </div>
+            <div class="flex items-center gap-4"><i class="fas fa-book text-indigo-500 text-xl"></i><span class="btn-text uppercase">The Archives</span></div>
             <i class="fas fa-chevron-right text-gray-600"></i>
         </div>
-
         <div id="folder-directory" class="w-full max-w-xs space-y-4">
             <div onclick="openFolder('divine')" class="glass p-6 border-l-4 border-yellow-500 flex justify-between items-center">
-                <div><p class="text-[10px] font-black uppercase tracking-widest">Quran_verses</p><p class="text-[9px] text-gray-500 uppercase mt-1">10 Verses</p></div>
-                <i class="fas fa-folder-open text-gray-700"></i>
+                <div><p class="text-[10px] font-black uppercase tracking-widest">Quran_verses</p></div><i class="fas fa-folder-open text-gray-700"></i>
             </div>
             <div onclick="openFolder('logic')" class="glass p-6 border-l-4 border-indigo-500 flex justify-between items-center">
-                <div><p class="text-[10px] font-black uppercase tracking-widest">Logic_Core</p><p class="text-[9px] text-gray-500 uppercase mt-1">10 Fragments</p></div>
-                <i class="fas fa-folder-open text-gray-700"></i>
+                <div><p class="text-[10px] font-black uppercase tracking-widest">Logic_Core</p></div><i class="fas fa-folder-open text-gray-700"></i>
             </div>
             <div onclick="openFolder('science')" class="glass p-6 border-l-4 border-cyan-400 flex justify-between items-center">
-                <div><p class="text-[10px] font-black uppercase tracking-widest">Science_Units</p><p class="text-[9px] text-gray-500 uppercase mt-1">10 Solutions</p></div>
-                <i class="fas fa-folder-open text-gray-700"></i>
+                <div><p class="text-[10px] font-black uppercase tracking-widest">Science_Units</p></div><i class="fas fa-folder-open text-gray-700"></i>
             </div>
         </div>
-
         <div id="folder-items" class="w-full max-w-xs hidden space-y-4">
-            <button onclick="backToDirectory()" class="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <i class="fas fa-arrow-left"></i> Directory
-            </button>
-            <div id="items-injection-point" class="space-y-4 pb-20"></div>
+            <button onclick="backToDirectory()" class="text-[9px] font-black text-indigo-400 uppercase mb-4 flex items-center gap-2"><i class="fas fa-arrow-left"></i> Directory</button>
+            <div id="items-injection-point" class="space-y-4"></div>
         </div>
-    </div>
-
-    <div id="terminalOverlay">
-        <div id="terminal-text"></div>
-        <button onclick="closeTerminal()" id="term-close" class="mt-12 text-[10px] text-gray-500 font-bold uppercase tracking-widest hidden border-b border-gray-800 pb-1">Disconnect</button>
     </div>
 
     <div id="bookOverlay">
-        <div class="w-full max-w-xs flex justify-between items-center mb-10">
-            <h2 class="text-lg font-black tracking-widest uppercase">The Archives</h2>
-            <button onclick="closeBooks()" class="text-white text-4xl">&times;</button>
-        </div>
+        <div class="w-full max-w-xs flex justify-between items-center mb-10"><h2 class="text-lg font-black tracking-widest uppercase">The Archives</h2><button onclick="closeBooks()" class="text-white text-4xl">&times;</button></div>
         <div class="w-full max-w-xs space-y-4">
-            <div class="glass p-4 flex items-center gap-5">
-                <div class="num-icon bg-green-500/10 text-green-400 border-green-500/30">1</div>
-                <div><p class="text-[8px] text-green-500 font-bold uppercase tracking-widest">History</p><p class="text-sm font-bold">Ar-Raheequl Makhtum</p></div>
-            </div>
-            <div class="glass p-4 flex items-center gap-5">
-                <div class="num-icon bg-indigo-500/10 text-indigo-400 border-indigo-500/30">2</div>
-                <div><p class="text-[8px] text-indigo-400 font-bold uppercase tracking-widest">Logic</p><p class="text-sm font-bold">Paradoxical Sajid</p></div>
-            </div>
-            <div class="glass p-4 flex items-center gap-5">
-                <div class="num-icon bg-red-500/10 text-red-400 border-red-500/30">3</div>
-                <div><p class="text-[8px] text-red-500 font-bold uppercase tracking-widest">Resilience</p><p class="text-sm font-bold">La Tahzan</p></div>
-            </div>
+            <div class="glass p-4 flex items-center gap-5"><div class="num-icon bg-green-500/10 text-green-400">1</div><div><p class="text-[8px] uppercase">History</p><p class="text-sm font-bold">Ar-Raheequl Makhtum</p></div></div>
+            <div class="glass p-4 flex items-center gap-5"><div class="num-icon bg-indigo-500/10 text-indigo-400">2</div><div><p class="text-[8px] uppercase">Logic</p><p class="text-sm font-bold">Paradoxical Sajid</p></div></div>
+            <div class="glass p-4 flex items-center gap-5"><div class="num-icon bg-red-500/10 text-red-400">3</div><div><p class="text-[8px] uppercase">Resilience</p><p class="text-sm font-bold">La Tahzan</p></div></div>
         </div>
-        <button onclick="closeBooks()" class="mt-12 text-[10px] text-gray-500 uppercase tracking-[0.3em] font-bold">Back</button>
     </div>
 
+    <div id="terminalOverlay"><div id="terminal-text" class="font-mono text-indigo-400 text-center max-w-xs"></div><button onclick="closeTerminal()" id="term-close" class="mt-8 text-[10px] text-gray-500 uppercase hidden border-b border-gray-800">Disconnect</button></div>
+
     <script>
-        /* VAULT DATA AND FUNCTIONS */
         const vaultData = {
             divine: [{t:"94:5",c:"For indeed, with hardship [will be] ease."},{t:"13:28",c:"By the remembrance of Allah do hearts find peace."},{t:"2:286",c:"Allah does not burden a soul beyond that it can bear."},{t:"39:53",c:"Do not despair of the mercy of Allah."},{t:"65:3",c:"He will provide from where he does not expect."},{t:"57:3",c:"He is the First and the Last."},{t:"29:69",c:"We will surely guide them to Our ways."},{t:"2:153",c:"Indeed, Allah is with the patient."},{t:"42:19",c:"Allah is Subtle with His servants."},{t:"14:7",c:"If you are grateful, I will increase you."}],
             logic: [{t:"Socrates",c:"The unexamined life is not worth living."},{t:"Aurelius",c:"Everything we see is a perspective, not the truth."},{t:"Al-Ghazali",c:"Declare jihad on ego, pride, and greed."},{t:"Bacon",c:"Silence nourishes wisdom."},{t:"Nietzsche",c:"He who has a why to live can bear almost any how."},{t:"Descartes",c:"I think, therefore I am."},{t:"Rumi",c:"The wound is where the light enters."},{t:"Fragment",c:"Call things by their right names."},{t:"Stoic",c:"Power over your mind—not outside events."},{t:"Caustic",c:"Truth is bitter medicine, but the only cure."}],
             science: [{t:"E=mc²",c:"Mass-Energy",s:"Matter is condensed energy."},{t:"φ (1.618)",c:"Golden Ratio",s:"The universal code of beauty."},{t:"0 Kelvin",c:"Absolute Zero",s:"Atomic motion stops."},{t:"π (3.141)",c:"Pi",s:"The infinite circle ratio."},{t:"F=ma",c:"Newton II",s:"Force = Mass x Acceleration."},{t:"ΔS ≥ 0",c:"Entropy",s:"Universe moves toward disorder."},{t:"c",c:"Light Speed",s:"299,792,458 m/s."},{t:"eⁱπ + 1 = 0",c:"Euler",s:"Connecting 5 fundamental constants."},{t:"Uncertainty",c:"Heisenberg",s:"Cannot know position and momentum perfectly."},{t:"Fibonacci",c:"Growth",s:"Nature's numbering code."}]
         };
-        const fragments = [ "Logic is the shield.", "Control the ego.", "Truth is absolute.", "Knowledge is light.", "Reality is a construct.", "Stay caustic.", "Action over overthinking.", "Done is better than perfect.", "Momentum builds motivation.", "Consistency > Intensity.", "Slow progress is still progress.", "Fall seven times, stand up eight.", "Win the morning, win the day.", "Discipline > Motivation.", "Don’t stop until you’re proud.", "Focus on the how, not the what if.", "Your only limit is your mind.", "Tiny habits, big results.", "Start where you are.", "Own the day.", "Precision is power.", "Silence is an answer.", "Master the routine.", "Embrace the friction.", "Efficiency is life.", "No excuses, only data.", "Focus is a muscle.", "Adapt or expire.", "Keep the edge sharp.", "Endure and survive.", "Output over input.", "Calculated risks only.", "Emotions are variables.", "Solve the problem.", "Stay cold, stay focused.", "Victory is in the details.", "Time is the only currency.", "Kill the distractions.", "Build the machine.", "Execution is everything.", "Do not hesitate.", "Analyze, then act.", "Strength is earned.", "Hard reset the mind.", "Minimize the noise.", "Results over intentions.", "Stay objective.", "Burn the ships.", "Move with purpose.", "Game the system.", "Default to action.", "Sharpen the blade.", "Reject mediocrity.", "Entropy is the enemy.", "Seek the truth.", "Limit the chatter.", "Work in silence.", "Let results speak.", "Unleash the grind.", "Patterns never lie.", "Master the self.", "Break the loop.", "Refine the process.", "Obsession wins.", "Ignore the critics.", "Stay hungry.", "No easy days.", "Be the anomaly.", "Calculated execution.", "Eyes on the code.", "Think deeper.", "Fear is a ghost.", "Grind until it works.", "Optimized for success.", "The ego is a virus.", "Stay clinical.", "Zero distractions.", "Mental fortress.", "Crush the doubt.", "Beyond the limits.", "Logic above all.", "Fuel the fire.", "Pressure creates gems.", "Destroy the comfort zone.", "Stay lethal.", "Focus like a laser.", "The work is the way.", "No shortcuts.", "High stakes, high focus.", "Outwork everyone.", "Build the legacy.", "Armor the mind.", "Pure output.", "Scale the mountain.", "Stay relentless.", "Hunt the goal.", "Evolve or fail.", "Control the narrative.", "The mission is all.", "Stay dangerous.", "Iterate and improve.", "Delete the clutter.", "Upgrade the software.", "Stay sovereign.", "Logic doesn't blink.", "Earn your sleep.", "Complexity is a trap.", "Simple is lethal.", "Attack the day.", "Be the architect.", "Willpower is finite.", "Code your future.", "Live with intent.", "Master the chaos.", "Forge the path.", "Iron sharpens iron.", "Think in systems.", "Reject the average.", "Speed is an asset.", "Stay anonymous.", "Grind in the dark.", "Logic is the compass.", "No white flags.", "Power through.", "Strictly business.", "Verify everything.", "Trust the data.", "Build the empire.", "Eyes on the prize.", "Defy the odds.", "Keep moving.", "Hustle harder.", "Stay vigilant.", "Logic over luck.", "Calculated aggression.", "Refine the craft.", "Solidify the plan.", "Crush the ego.", "Evolve the mind.", "Pure efficiency.", "The goal is clear.", "Eliminate weakness.", "Standardize excellence.", "Be the storm.", "Outlast the rest.", "The clock is ticking.", "Execute the vision.", "Fortify the will.", "Logic is king.", "Success is binary.", "One task at a time.", "Stay unbreakable.", "No room for error.", "Target acquired.", "Stay focused.", "Work the plan.", "Finish the job.", "Break the chains.", "Own the outcome.", "Zero margin for error.", "Maximize potential.", "The grind is internal.", "Seek discomfort.", "Apathy is death.", "Curiosity is fuel.", "Remain detached.", "High performance only.", "Unfuck your mind.", "Master the basics.", "Build on bedrock.", "Filter the input.", "Protect the vision.", "Stay sharp, stay humble.", "Relentless pursuit.", "No plan B.", "Obsess over quality.", "Mastery takes time.", "Earn the win.", "Face the facts.", "No emotional debt.", "Stay mission-driven.", "Act with intent.", "Discipline is freedom.", "Keep your head down.", "Let the work show.", "Cut the dead weight.", "Slay the ego.", "Focus on the next rep.", "Mind like water.", "Body like iron.", "Will like steel.", "Deep work only.", "Eliminate the non-essential.", "Stay on the path.", "The obstacles are the way.", "Win from within.", "No handouts.", "Calculated persistence.", "Be your own hero.", "Logic over feelings.", "The code is life.", "Debug the routine.", "Iterate to perfection.", "Never settle.", "Keep the fire burning.", "Stay in the zone.", "Master the trade.", "Push the limit.", "Exceed expectations.", "No mercy for laziness.", "The grind is constant.", "Rise and grind.", "Make it happen.", "Stay frosty.", "Keep it moving.", "Level up.", "Be the expert.", "No excuses permitted.", "Stay intense.", "Focus on the prize.", "Earn your place.", "The future is earned.", "Work while they sleep.", "Learn while they party.", "Live like they won't.", "Win like they can't.", "Stay gritty.", "Hard work is the base.", "Execute without emotion.", "Systematic success.", "The data is king.", "Find the bug.", "Fix the bug.", "Ship the code.", "Stay proactive.", "No reactive moves.", "Anticipate the hit.", "Absorb the blow.", "Counter with logic.", "Stay steady.", "Breathe through the pressure.", "Focus on the solution.", "Problem-solving mindset.", "The truth sets the pace.", "Logic is a weapon.", "Arm yourself with knowledge.", "Read the manual.", "Master the tools.", "Be the toolmaker.", "Build the infrastructure.", "Own the system.", "Stay modular.", "Scalable growth only.", "Minimize latency.", "Optimize the path.", "Remove the friction.", "Logic is the filter.", "Stay objective at all costs.", "Truth hurts, lies kill.", "The ego is a liar.", "Silence is tactical.", "Listen more, talk less.", "Knowledge is currency.", "Spend it wisely.", "Invest in yourself.", "The compounding effect.", "Consistency wins wars.", "Discipline wins lives.", "Be the exception.", "Reject the status quo.", "Think for yourself.", "Logic is your sovereign.", "Stay centered.", "Focus on the core.", "Strip away the fluff.", "The essence is enough.", "Quality over quantity.", "Less but better.", "Precision is the goal.", "Hit the target.", "Reset and repeat.", "The loop is life.", "Refine the loop.", "Break the bad loops.", "Install the good loops.", "Software for the soul.", "Hardcore discipline.", "No compromise.", "Stay authentic.", "Logic doesn't care.", "Reality is cold.", "Warm it with work.", "Build your own world.", "Construct the reality.", "Code the dream.", "Execute the nightmare.", "Stay awake.", "Eyes open.", "Mind sharp.", "Heart cold.", "Will strong.", "Be the master.", "Slave to no one.", "Sovereign of self.", "Logic is the law.", "Control the variables.", "Minimize the risk.", "Maximize the reward.", "Calculated moves only.", "Stay tactical.", "Strategic patience.", "Aggressive execution.", "The blend is key.", "Stay balanced.", "Focus on the now.", "The past is data.", "The future is a projection.", "The present is the input.", "Input leads to output.", "Better input, better life.", "Garbage in, garbage out.", "Clean the stream.", "Logic is the filter.", "Stay pure.", "The path is narrow.", "The reward is wide.", "Stay focused on the gate.", "Open the door.", "Walk through.", "Don't look back.", "Burn the bridges.", "Only forward.", "Speed and power.", "The grind is a privilege.", "Love the struggle.", "Respect the process.", "Honor the work.", "The work is sacred.", "Stay devoted.", "Focus is a prayer.", "Execution is an offering.", "Results are the blessing.", "Stay humble in victory.", "Stay stoic in defeat.", "Logic is the anchor.", "Truth is the sail.", "Knowledge is the wind.", "Reality is the sea.", "Navigate the storm.", "Be the captain.", "Control the ship.", "Stay on course.", "No distractions on deck.", "Eyes on the horizon.", "Land is earned.", "Keep rowing.", "Logic is the rhythm.", "Stay in sync.", "Master the tempo.", "Control the speed.", "Slow is smooth.", "Smooth is fast.", "Fast is lethal.", "Stay lethal.", "Logic is the edge.", "The blade is you.", "Stay sharp.", "Cut through the noise.", "Direct hit.", "No wasted motion.", "Efficiency is beauty.", "The code is art.", "Stay artistic.", "Logic is the canvas.", "Knowledge is the paint.", "Execution is the brush.", "Reality is the masterpiece.", "Own the gallery.", "Build the legacy.", "Stay legendary.", "Logic is the myth.", "Truth is the reality.", "Knowledge is the power.", "Control is the key.", "Stay in command.", "The system is yours.", "Access granted.", "Root access only.", "Stay admin.", "No guest access.", "Protect the kernel.", "Logic is the firewall.", "Stay secure.", "Truth is the encryption.", "Knowledge is the key.", "Reality is the server.", "Keep it running.", "Zero downtime.", "Maximum uptime.", "Stay online.", "The grind never sleeps.", "Logic is the wake-up call.", "Stay alert.", "Stay awake.", "Stay caustic.", "Logic is the shield.", "Control the ego.", "Truth is absolute.", "Knowledge is light.", "Reality is a construct.", "Stay caustic.", "Action over overthinking.", "Done is better than perfect.", "Momentum builds motivation.", "Consistency > Intensity.", "Slow progress is still progress.", "Fall seven times, stand up eight.", "Win the morning, win the day.", "Discipline > Motivation.", "Don’t stop until you’re proud.", "Focus on the how, not the what if.", "Your only limit is your mind.", "Tiny habits, big results.", "Start where you are.", "Own the day.", "Logic is the shield.", "The grind continues.", "Final directive: Win." ];
+        const fragments = ["Logic is the shield.", "Control the ego.", "Truth is absolute.", "Action over overthinking.", "Consistency > Intensity."];
 
-        window.addEventListener('load', () => { 
-            document.getElementById('loader').classList.add('loader-hidden'); 
-        });
-        
-        function delayedLink(url) { setTimeout(() => { window.open(url, '_blank'); }, 400); }
-        function openBooks() { document.getElementById('bookOverlay').style.display = 'flex'; }
-        function closeBooks() { document.getElementById('bookOverlay').style.display = 'none'; }
+        let massiveData = [];
+        async function loadData() {
+            try {
+                const r = await fetch('database.json');
+                massiveData = await r.json();
+            } catch(e) { 
+                massiveData = [{tag:"Error", ar:"Check database.json", bn: "ডাটাবস কানেকশন এরর"}];
+            }
+        }
+        function generateFromJSON() {
+            const item = massiveData[Math.floor(Math.random() * massiveData.length)];
+            document.getElementById('dua-ar').innerText = item.ar;
+            document.getElementById('dua-bn').innerText = item.bn;
+            document.getElementById('dua-tag').innerText = item.tag;
+        }
+
+        function openDua() { document.getElementById('duaOverlay').style.display = 'flex'; }
+        function closeDua() { document.getElementById('duaOverlay').style.display = 'none'; }
         function openVault() { document.getElementById('vaultOverlay').style.display = 'flex'; }
         function closeVault() { document.getElementById('vaultOverlay').style.display = 'none'; backToDirectory(); }
-        
+        function openBooks() { document.getElementById('bookOverlay').style.display = 'flex'; }
+        function closeBooks() { document.getElementById('bookOverlay').style.display = 'none'; }
+        function delayedLink(url) { setTimeout(() => { window.open(url, '_blank'); }, 400); }
+
         function openFolder(f) {
             document.getElementById('folder-directory').classList.add('hidden');
             document.getElementById('folder-items').classList.remove('hidden');
@@ -302,102 +180,52 @@
             target.innerHTML = '';
             vaultData[f].forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'glass p-5 text-left';
-                div.innerHTML = `<p class="text-[8px] font-black opacity-40 uppercase mb-1 tracking-widest">${item.t}</p>
-                                 <p class="text-xs font-bold leading-relaxed">${item.c}</p>
-                                 ${item.s ? `<p class="text-[10px] mt-4 text-indigo-400 hidden" id="${item.t}">${item.s}</p>` : ''}`;
+                div.className = 'glass p-5 text-left mb-4';
+                div.innerHTML = `<p class="text-[8px] font-black opacity-40 uppercase mb-1 tracking-widest">${item.t}</p><p class="text-xs font-bold leading-relaxed">${item.c}</p>${item.s ? `<p class="text-[10px] mt-4 text-indigo-400 hidden" id="${item.t}">${item.s}</p>` : ''}`;
                 if(item.s) div.onclick = (e) => { e.stopPropagation(); document.getElementById(item.t).classList.toggle('hidden'); };
                 target.appendChild(div);
             });
         }
-        function backToDirectory() {
-            document.getElementById('folder-directory').classList.remove('hidden');
-            document.getElementById('folder-items').classList.add('hidden');
-        }
+        function backToDirectory() { document.getElementById('folder-directory').classList.remove('hidden'); document.getElementById('folder-items').classList.add('hidden'); }
 
         function runTerminal() {
-            const term = document.getElementById('terminalOverlay');
-            const text = document.getElementById('terminal-text');
-            const closeBtn = document.getElementById('term-close');
+            const term = document.getElementById('terminalOverlay'), text = document.getElementById('terminal-text'), closeBtn = document.getElementById('term-close');
             term.style.display = 'flex'; text.innerHTML = ''; closeBtn.classList.add('hidden');
             const msg = fragments[Math.floor(Math.random() * fragments.length)];
-            let i = 0;
-            const type = setInterval(() => {
-                text.innerHTML += msg[i]; i++;
-                if(i >= msg.length) { clearInterval(type); closeBtn.classList.remove('hidden'); }
-            }, 60);
+            let i = 0; const type = setInterval(() => { text.innerHTML += msg[i]; i++; if(i >= msg.length) { clearInterval(type); closeBtn.classList.remove('hidden'); } }, 60);
         }
         function closeTerminal() { document.getElementById('terminalOverlay').style.display = 'none'; }
 
-        /* DIRECTIONAL RAIN BACKGROUND LOGIC */
+        // BG Canvas Logic
         const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
-        let lineArray = [];
-        let lineCount = 70;
-        let dirX = 0;
-        let dirY = 4;
-
+        let lineArray = [], lineCount = 70, dirX = 0, dirY = 4;
         function resize() {
-            canvas.width = window.innerWidth; 
-            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             lineArray = [];
-            for (let i = 0; i < lineCount; i++) {
-                lineArray.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    length: Math.random() * 60 + 20,
-                    opacity: Math.random() * 0.6 + 0.2,
-                    speedMult: Math.random() * 1 + 0.5
-                });
-            }
+            for (let i = 0; i < lineCount; i++) { lineArray.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, length: Math.random() * 60 + 20, opacity: Math.random() * 0.6 + 0.2, speedMult: Math.random() * 1 + 0.5 }); }
         }
-
         function draw() {
-            ctx.fillStyle = '#050505'; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
+            ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, canvas.width, canvas.height);
             lineArray.forEach(l => {
-                ctx.strokeStyle = `rgba(220, 220, 220, ${l.opacity})`; 
-                ctx.lineWidth = 1.5;
-                ctx.beginPath();
-                ctx.moveTo(l.x, l.y);
-                ctx.lineTo(l.x + (dirX * 5), l.y + (dirY * 5)); 
-                ctx.stroke();
-
-                l.x += dirX * l.speedMult;
-                l.y += dirY * l.speedMult;
-
-                // Wrap around screen edges
-                if (l.x > canvas.width) l.x = 0;
-                if (l.x < 0) l.x = canvas.width;
-                if (l.y > canvas.height) l.y = 0;
-                if (l.y < 0) l.y = canvas.height;
+                ctx.strokeStyle = `rgba(220, 220, 220, ${l.opacity})`; ctx.lineWidth = 1.5; ctx.beginPath();
+                ctx.moveTo(l.x, l.y); ctx.lineTo(l.x + (dirX * 5), l.y + (dirY * 5)); ctx.stroke();
+                l.x += dirX * l.speedMult; l.y += dirY * l.speedMult;
+                if (l.x > canvas.width) l.x = 0; if (l.x < 0) l.x = canvas.width; if (l.y > canvas.height) l.y = 0; if (l.y < 0) l.y = canvas.height;
             });
             requestAnimationFrame(draw);
         }
-
-        // Change direction on click
-        window.addEventListener('mousedown', () => {
-            dirX = (Math.random() - 0.5) * 10;
-            dirY = (Math.random() - 0.5) * 10;
-        });
+        window.addEventListener('mousedown', () => { dirX = (Math.random() - 0.5) * 10; dirY = (Math.random() - 0.5) * 10; });
 
         function updateUI() {
-            const now = new Date();
-            const start = new Date(now.getFullYear(), 0, 0);
-            const diff = now - start;
+            const now = new Date(), start = new Date(now.getFullYear(), 0, 0), diff = now - start;
             const percent = ((Math.floor(diff / (1000 * 60 * 60 * 24)) / 365) * 100).toFixed(1);
             document.getElementById('progressText').innerText = `Exploring '26 • ${percent}%`;
-            setTimeout(() => { if(document.getElementById('progressFill')) document.getElementById('progressFill').style.width = `${percent}%`; }, 500);
+            if(document.getElementById('progressFill')) document.getElementById('progressFill').style.width = `${percent}%`;
             document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour12: false });
         }
 
         window.addEventListener('resize', resize);
-        setInterval(updateUI, 1000);
-        
-        resize(); 
-        draw(); 
-        updateUI();
+        window.addEventListener('load', () => { document.getElementById('loader').classList.add('loader-hidden'); resize(); draw(); loadData(); updateUI(); setInterval(updateUI, 1000); });
     </script>
 </body>
 </html>
-
