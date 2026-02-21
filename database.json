@@ -19,4 +19,66 @@
   { "tag": "The Tongue", "ar": "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ", "bn": "যে আল্লাহ ও পরকালে বিশ্বাস করে, সে যেন ভালো কথা বলে অথবা চুপ থাকে। (Bukhari)" },
   { "tag": "Health", "ar": "نِعْمَتَانِ مَغْبُونٌ فِيهِمَا كَثِيرٌ مِنَ النَّاسِ الصِّحَّةُ وَالْفَرَاغُ", "bn": "দুটি নিয়ামত এমন যাতে অধিকাংশ মানুষ ক্ষতিগ্রস্ত—স্বাস্থ্য ও অবসর। (Sahih Bukhari)" },
   { "tag": "Brotherhood", "ar": "الْمُسْلِمُ أَخُو الْمُسْلِمِ", "bn": "এক মুসলিম অন্য মুসলিমের ভাই। (Sahih Muslim)" }
+
+  {
+    "tag": "Core Faith",
+    "ar": "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ",
+    "en": "There is no god but Allah alone, without any partner.",
+    "bn": "আল্লাহ ছাড়া কোনো উপাস্য নেই, তিনি এক, তাঁর কোনো শরিক নেই। [Sahih Bukhari: 3293]"
+  },
+  {
+    "tag": "Protection",
+    "ar": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ",
+    "en": "In the name of Allah, by whose name nothing can cause harm in the earth or in the heaven.",
+    "bn": "আল্লাহর নামে, যাঁর নামের বরকতে আসমান ও যমিনের কোনো কিছুই ক্ষতি করতে পারে না। [Abu Dawud: 5088]"
+  },
+  {
+    "tag": "Anxiety Relief",
+    "ar": "لَا إِلَهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+    "en": "There is no deity except You; exalted are You. Indeed, I have been of the wrongdoers.",
+    "bn": "আপনি ছাড়া কোনো উপাস্য নেই, আপনি পবিত্র; নিশ্চয়ই আমি জালেমদের অন্তর্ভুক্ত ছিলাম। [Surah Al-Anbiya: 87]"
+  },
+  {
+    "tag": "Knowledge",
+    "ar": "رَبِّ زِدْنِي عِلْمًا",
+    "en": "My Lord, increase me in knowledge.",
+    "bn": "হে আমার রব! আমার জ্ঞান বৃদ্ধি করে দিন। [Surah Taha: 114]"
+  },
+  {
+    "tag": "Steadfastness",
+    "ar": "يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ",
+    "en": "O Turner of the hearts, keep my heart steadfast upon Your religion.",
+    "bn": "হে অন্তর পরিবর্তনকারী! আমার অন্তরকে আপনার দ্বীনের ওপর অবিচল রাখুন। [Tirmidhi: 3522]"
+  },
+  {
+    "tag": "Forgiveness",
+    "ar": "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ",
+    "en": "I seek the forgiveness of Allah and I turn to Him in repentance.",
+    "bn": "আমি আল্লাহর ক্ষমা প্রার্থনা করছি এবং তাঁর দিকেই ফিরে আসছি। [Sahih Muslim: 2702]"
+  },
+  {
+    "tag": "Inner Peace",
+    "ar": "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
+    "en": "Unquestionably, by the remembrance of Allah hearts are assured.",
+    "bn": "জেনে রেখো, আল্লাহর জিকিরেই কলব বা অন্তর প্রশান্ত হয়। [Surah Ar-Ra'd: 28]"
+  },
+  {
+    "tag": "Ease of Task",
+    "ar": "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي",
+    "en": "My Lord, expand for me my breast and ease for me my task.",
+    "bn": "হে আমার রব! আমার বক্ষ প্রশস্ত করে দিন এবং আমার কাজ সহজ করে দিন। [Surah Taha: 25-26]"
+  },
+  {
+    "tag": "Character",
+    "ar": "خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ",
+    "en": "The best among you are those who learn the Quran and teach it.",
+    "bn": "তোমাদের মধ্যে সর্বোত্তম সেই ব্যক্তি, যে নিজে কুরআন শেখে এবং অন্যকে শেখায়। [Sahih Bukhari: 5027]"
+  },
+  {
+    "tag": "Gratitude",
+    "ar": "الْحَمْدُ لِلَّهِ حَمْدًا كَثِيرًا طَيِّبًا مُبَارَكًا فِيهِ",
+    "en": "All praise is for Allah, many, pure, and blessed praises.",
+    "bn": "সমস্ত প্রশংসা আল্লাহর জন্য—প্রচুর, পবিত্র ও বরকতময় প্রশংসা। [Sahih Bukhari: 799]"
+  }
 ]
+
