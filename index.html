@@ -100,10 +100,12 @@ here<!DOCTYPE html>
             <button onclick="closeDua()" class="text-white text-4xl">&times;</button>
         </div>
         <div class="glass w-full max-w-sm p-8 text-center border-emerald-500/20">
-            <span id="dua-tag" class="text-[8px] font-bold text-emerald-500 uppercase tracking-widest">Awaiting Sync</span>
-            <p id="dua-ar" class="font-arabic text-2xl mt-8 mb-6 text-white leading-loose">---</p>
-            <p id="dua-bn" class="text-xs text-gray-400 leading-relaxed italic">Fetch from database</p>
-            <button onclick="triggerHaptic('success'); generateFromJSON();" class="w-full mt-10 ...">Next_Dua</button>
+    <span id="dua-tag" class="text-[8px] font-bold text-emerald-500 uppercase tracking-widest">---</span>
+    <p id="dua-ar" class="font-arabic text-2xl mt-8 mb-4 text-white leading-loose">---</p>
+    <p id="dua-en" class="text-[11px] text-indigo-300 mb-3 font-medium uppercase tracking-tighter">---</p> <p id="dua-bn" class="text-xs text-gray-400 leading-relaxed italic">---</p>
+    <button onclick="triggerHaptic('light'); generateFromJSON();" class="...">Next_Dua</button>
+</div>
+
         </div>
     </div>
 
@@ -157,12 +159,21 @@ here<!DOCTYPE html>
             } catch(e) { 
                 massiveData = [{tag:"Error", ar:"Check database.json", bn: "ডাটাবস কানেকশন এরর"}];
             }
-        }
-        function generateFromJSON() {
-            const item = massiveData[Math.floor(Math.random() * massiveData.length)];
-            document.getElementById('dua-ar').innerText = item.ar;
-            document.getElementById('dua-bn').innerText = item.bn;
-            document.getElementById('dua-tag').innerText = item.tag;
+        {
+            function generateFromJSON() {
+    const arDisplay = document.getElementById('dua-ar');
+    const enDisplay = document.getElementById('dua-en'); // Added this
+    const bnDisplay = document.getElementById('dua-bn');
+    const tagDisplay = document.getElementById('dua-tag');
+
+    const item = massiveData[Math.floor(Math.random() * massiveData.length)];
+    
+    arDisplay.innerText = item.ar;
+    enDisplay.innerText = item.en; // Added this
+    bnDisplay.innerText = item.bn;
+    tagDisplay.innerText = item.tag;
+}
+
         }
 
         function openDua() { document.getElementById('duaOverlay').style.display = 'flex'; }
