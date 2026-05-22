@@ -70,6 +70,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
@@ -128,7 +130,7 @@
             padding: 40px 20px; overflow-y: auto; 
         }
 
-        /* Interactive Terminal Specific Styles */
+        /* Terminal Styling */
         #terminalOverlay { z-index: 1000; background: rgba(5,5,5,0.99); justify-content: center; }
         .term-container { width: 100%; max-width: 500px; background: rgba(0,0,0,0.8); border: 1px solid #6366f1; padding: 20px; border-radius: 8px; font-family: 'Fira Code', monospace; box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
         .term-header { display: flex; justify-content: space-between; border-bottom: 1px dashed #6366f1; padding-bottom: 10px; margin-bottom: 15px; }
@@ -137,15 +139,19 @@
         .term-input-line { display: flex; align-items: center; color: #6366f1; font-size: 13px; }
         .term-input-line input { background: transparent; border: none; color: #ffffff; outline: none; flex-grow: 1; margin-left: 8px; font-family: 'Fira Code', monospace; }
         
-        /* Board / Node Specific Styles */
-        #board-list { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; max-height: 60vh; overflow-y: auto; padding-right: 5px; }
-        .board-msg { background: rgba(255,255,255,0.02); border-left: 2px solid #6366f1; padding: 12px; border-radius: 4px; }
+        /* Message Board Styling */
+        #board-list { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; max-height: 60vh; overflow-y: auto; padding-right: 5px; scrollbar-width: thin; scrollbar-color: #6366f1 rgba(255,255,255,0.05); }
+        #board-list::-webkit-scrollbar { width: 4px; }
+        #board-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
+        #board-list::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 4px; }
+        .board-msg { background: rgba(255,255,255,0.02); border-left: 2px solid #6366f1; padding: 12px; border-radius: 4px; text-align: left; }
         .board-meta { font-size: 9px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; display: flex; justify-content: space-between; }
-        .board-text { font-size: 12px; color: #d1d5db; line-height: 1.4; }
+        .board-text { font-size: 12px; color: #d1d5db; line-height: 1.4; word-break: break-word; }
         .board-input-area { width: 100%; max-width: 400px; display: flex; gap: 10px; }
-        .board-input-area input { flex-grow: 1; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 12px; outline: none; }
+        .board-input-area input { flex-grow: 1; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 12px; outline: none; transition: border-color 0.3s ease; }
         .board-input-area input:focus { border-color: #6366f1; }
-        .board-btn { background: rgba(99, 102, 241, 0.1); color: #6366f1; border: 1px solid #6366f1; padding: 0 20px; border-radius: 8px; font-weight: 900; font-size: 10px; cursor: pointer; text-transform: uppercase; tracking: widest; }
+        .board-btn { background: rgba(99, 102, 241, 0.1); color: #6366f1; border: 1px solid #6366f1; padding: 0 20px; border-radius: 8px; font-weight: 900; font-size: 10px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; }
+        .board-btn:hover { background: #6366f1; color: #ffffff; }
 
         .btn-text { letter-spacing: 0.15em; font-size: 0.75rem; font-weight: 700; }
         .progress-bg { background: rgba(255,255,255,0.05); height: 4px; border-radius: 10px; overflow: hidden; width: 120px; margin: 8px auto; }
@@ -202,7 +208,7 @@
                         </div>
                     </button>
 
-                    <button onclick="openBoard()" class="glass p-6 flex items-center justify-between group border-dashed border-green-500/40">
+                    <button onclick="openBoard()" class="glass p-6 flex items-center justify-between group border-dashed border-green-500/40 hover:border-green-400">
                         <div class="flex items-center gap-4">
                             <i class="fas fa-globe text-green-500 text-xl"></i>
                             <span class="btn-text uppercase">Global Node</span>
@@ -240,7 +246,7 @@
     <div id="vaultOverlay">
         <div class="w-full max-w-xs flex justify-between items-center mb-10">
             <h2 class="text-lg font-black tracking-widest uppercase">The Vault</h2>
-            <button onclick="closeVault()" class="text-white text-4xl">&times;</button>
+            <button onclick="closeVault()" class="text-white text-4xl hover:text-indigo-400 transition-colors">&times;</button>
         </div>
 
         <div onclick="openBooks()" class="glass w-full p-6 mb-8 flex items-center justify-between group">
@@ -248,26 +254,26 @@
                 <i class="fas fa-book text-indigo-500 text-xl"></i>
                 <span class="btn-text uppercase">The Archives</span>
             </div>
-            <i class="fas fa-chevron-right text-gray-600"></i>
+            <i class="fas fa-chevron-right text-gray-600 group-hover:text-white transition-colors"></i>
         </div>
 
         <div id="folder-directory" class="w-full max-w-xs space-y-4">
-            <div onclick="openFolder('divine')" class="glass p-6 border-l-4 border-yellow-500 flex justify-between items-center">
+            <div onclick="openFolder('divine')" class="glass p-6 border-l-4 border-yellow-500 flex justify-between items-center group">
                 <div><p class="text-[10px] font-black uppercase tracking-widest">Quran_verses</p><p class="text-[9px] text-gray-500 uppercase mt-1">10 Verses</p></div>
-                <i class="fas fa-folder-open text-gray-700"></i>
+                <i class="fas fa-folder-open text-gray-700 group-hover:text-yellow-500 transition-colors"></i>
             </div>
-            <div onclick="openFolder('logic')" class="glass p-6 border-l-4 border-indigo-500 flex justify-between items-center">
+            <div onclick="openFolder('logic')" class="glass p-6 border-l-4 border-indigo-500 flex justify-between items-center group">
                 <div><p class="text-[10px] font-black uppercase tracking-widest">Logic_Core</p><p class="text-[9px] text-gray-500 uppercase mt-1">10 Fragments</p></div>
-                <i class="fas fa-folder-open text-gray-700"></i>
+                <i class="fas fa-folder-open text-gray-700 group-hover:text-indigo-400 transition-colors"></i>
             </div>
-            <div onclick="openFolder('science')" class="glass p-6 border-l-4 border-cyan-400 flex justify-between items-center">
+            <div onclick="openFolder('science')" class="glass p-6 border-l-4 border-cyan-400 flex justify-between items-center group">
                 <div><p class="text-[10px] font-black uppercase tracking-widest">Science_Units</p><p class="text-[9px] text-gray-500 uppercase mt-1">10 Solutions</p></div>
-                <i class="fas fa-folder-open text-gray-700"></i>
+                <i class="fas fa-folder-open text-gray-700 group-hover:text-cyan-400 transition-colors"></i>
             </div>
         </div>
 
         <div id="folder-items" class="w-full max-w-xs hidden space-y-4">
-            <button onclick="backToDirectory()" class="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <button onclick="backToDirectory()" class="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-4 flex items-center gap-2 hover:text-white transition-colors">
                 <i class="fas fa-arrow-left"></i> Directory
             </button>
             <div id="items-injection-point" class="space-y-4 pb-20"></div>
@@ -277,7 +283,7 @@
     <div id="bookOverlay">
         <div class="w-full max-w-xs flex justify-between items-center mb-10">
             <h2 class="text-lg font-black tracking-widest uppercase">The Archives</h2>
-            <button onclick="closeBooks()" class="text-white text-4xl">&times;</button>
+            <button onclick="closeBooks()" class="text-white text-4xl hover:text-indigo-400 transition-colors">&times;</button>
         </div>
         <div class="w-full max-w-xs space-y-4">
             <div class="glass p-4 flex items-center gap-5">
@@ -293,7 +299,7 @@
                 <div><p class="text-[8px] text-red-500 font-bold uppercase tracking-widest">Resilience</p><p class="text-sm font-bold">La Tahzan</p></div>
             </div>
         </div>
-        <button onclick="closeBooks()" class="mt-12 text-[10px] text-gray-500 uppercase tracking-[0.3em] font-bold">Back</button>
+        <button onclick="closeBooks()" class="mt-12 text-[10px] text-gray-500 uppercase tracking-[0.3em] font-bold hover:text-white transition-colors">Back</button>
     </div>
 
     <div id="terminalOverlay">
@@ -316,12 +322,11 @@
     <div id="boardOverlay">
         <div class="w-full max-w-xs flex justify-between items-center mb-6">
             <h2 class="text-lg font-black tracking-widest uppercase text-green-400">Global Node</h2>
-            <button onclick="closeBoard()" class="text-white text-4xl">&times;</button>
+            <button onclick="closeBoard()" class="text-white text-4xl hover:text-green-400 transition-colors">&times;</button>
         </div>
         <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-8 text-center max-w-xs">An open ledger. Leave your mark.</p>
         
-        <div id="board-list">
-            </div>
+        <div id="board-list"></div>
 
         <div class="board-input-area">
             <input type="text" id="board-msg-input" placeholder="Transmit thought..." maxlength="100">
@@ -330,6 +335,11 @@
     </div>
 
     <script>
+        // --- LIVE SUPABASE DATABASE CONFIGURATION ---
+        const SUPABASE_URL = "https://ihvpbpndcspobhlhnees.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_9ahvNOumSFZOmqTBi2J1Hw_McxvuJub";
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         const vaultData = {
             divine: [{t:"94:5",c:"For indeed, with hardship [will be] ease."},{t:"13:28",c:"By the remembrance of Allah do hearts find peace."},{t:"2:286",c:"Allah does not burden a soul beyond that it can bear."},{t:"39:53",c:"Do not despair of the mercy of Allah."},{t:"65:3",c:"He will provide from where he does not expect."},{t:"57:3",c:"He is the First and the Last."},{t:"29:69",c:"We will surely guide them to Our ways."},{t:"2:153",c:"Indeed, Allah is with the patient."},{t:"42:19",c:"Allah is Subtle with His servants."},{t:"14:7",c:"If you are grateful, I will increase you."}],
             logic: [{t:"Socrates",c:"The unexamined life is not worth living."},{t:"Aurelius",c:"Everything we see is a perspective, not the truth."},{t:"Al-Ghazali",c:"Declare jihad on ego, pride, and greed."},{t:"Bacon",c:"Silence nourishes wisdom."},{t:"Nietzsche",c:"He who has a why to live can bear almost any how."},{t:"Descartes",c:"I think, therefore I am."},{t:"Rumi",c:"The wound is where the light enters."},{t:"Fragment",c:"Call things by their right names."},{t:"Stoic",c:"Power over your mind—not outside events."},{t:"Caustic",c:"Truth is bitter medicine, but the only cure."}],
@@ -354,11 +364,14 @@
             target.innerHTML = '';
             vaultData[f].forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'glass p-5 text-left';
-                div.innerHTML = `<p class="text-[8px] font-black opacity-40 uppercase mb-1 tracking-widest">${item.t}</p>
+                div.className = 'glass p-5 text-left border border-white/5';
+                div.innerHTML = `<p class="text-[8px] font-black opacity-40 uppercase mb-1 tracking-widest text-indigo-400">${item.t}</p>
                                  <p class="text-xs font-bold leading-relaxed">${item.c}</p>
-                                 ${item.s ? `<p class="text-[10px] mt-4 text-indigo-400 hidden" id="${item.t}">${item.s}</p>` : ''}`;
-                if(item.s) div.onclick = (e) => { e.stopPropagation(); document.getElementById(item.t).classList.toggle('hidden'); };
+                                 ${item.s ? `<p class="text-[10px] mt-4 text-cyan-400 hidden font-mono border-t border-white/5 pt-2" id="${item.t}">${item.s}</p>` : ''}`;
+                if(item.s) {
+                    div.style.cursor = 'pointer';
+                    div.onclick = (e) => { e.stopPropagation(); document.getElementById(item.t).classList.toggle('hidden'); };
+                }
                 target.appendChild(div);
             });
         }
@@ -367,7 +380,7 @@
             document.getElementById('folder-items').classList.add('hidden');
         }
 
-        // --- NEW INTERACTIVE TERMINAL LOGIC ---
+        // --- INTERACTIVE TERMINAL ENGINE ---
         const termInput = document.getElementById('cmd-input');
         const termOutput = document.getElementById('terminal-output');
 
@@ -375,12 +388,10 @@
             document.getElementById('terminalOverlay').style.display = 'flex';
             termInput.focus();
         }
-
         function closeTerminal() { 
             document.getElementById('terminalOverlay').style.display = 'none'; 
             termInput.value = '';
         }
-
         function printToTerminal(text, isCommand = false) {
             const div = document.createElement('div');
             if(isCommand) {
@@ -396,12 +407,11 @@
             if(e.key === 'Enter') {
                 const cmd = this.value.trim().toLowerCase();
                 if(!cmd) return;
-                
                 printToTerminal(cmd, true);
                 
                 switch(cmd) {
                     case '/help':
-                        printToTerminal('Available commands:<br>- <span class="text-white">/fragment</span> : Fetch a random logic core.<br>- <span class="text-white">/divine</span> : Fetch a Quranic verse.<br>- <span class="text-white">/science</span> : Fetch a scientific constant.<br>- <span class="text-white">/clear</span> : Clear terminal output.');
+                        printToTerminal('Available commands:<br>- <span class="text-white">/fragment</span> : Random logic core.<br>- <span class="text-white">/divine</span> : Quranic verse.<br>- <span class="text-white">/science</span> : Scientific constant.<br>- <span class="text-white">/clear</span> : Clear output.');
                         break;
                     case '/fragment':
                         printToTerminal("> " + fragments[Math.floor(Math.random() * fragments.length)]);
@@ -424,23 +434,32 @@
             }
         });
 
-        // --- NEW MESSAGE BOARD (NODE) LOGIC ---
+        // --- GLOBAL REALTIME NODE ENGINE ---
         const boardList = document.getElementById('board-list');
         const boardInput = document.getElementById('board-msg-input');
 
-        // Ghost messages to make it look alive. Replace with Firebase/Supabase fetch later.
-        let localMessages = JSON.parse(localStorage.getItem('caustic_node_msgs')) || [
-            { id: "0xA1B2", time: "2026-05-18", text: "Initiating node connection. Stable." },
-            { id: "0x8F9C", time: "2026-05-19", text: "Quiet in here. Keep the code clean." }
-        ];
+        async function fetchMessages() {
+            const { data, error } = await supabase.from('global_messages').select('*').order('created_at', { ascending: true });
+            if (error) {
+                console.error("Database connection error:", error);
+                boardList.innerHTML = `<div class="text-[10px] text-red-500 font-mono tracking-wider text-center p-4">DATABASE OFFLINE. CHECK LOGS.</div>`;
+            } else {
+                renderMessages(data);
+            }
+        }
 
-        function renderMessages() {
+        function renderMessages(messages) {
             boardList.innerHTML = '';
-            localMessages.forEach(msg => {
+            if(!messages || messages.length === 0) {
+                boardList.innerHTML = `<p class="text-[10px] text-gray-600 text-center uppercase tracking-widest p-4">Node Empty. Be first.</p>`;
+                return;
+            }
+            messages.forEach(msg => {
+                const dateStr = new Date(msg.created_at).toISOString().split('T')[0];
                 boardList.innerHTML += `
                     <div class="board-msg">
-                        <div class="board-meta"><span>ID: ${msg.id}</span><span>${msg.time}</span></div>
-                        <div class="board-text">${msg.text}</div>
+                        <div class="board-meta"><span>ID: ${msg.hex_id}</span><span>${dateStr}</span></div>
+                        <div class="board-text">${msg.message}</div>
                     </div>
                 `;
             });
@@ -449,34 +468,45 @@
 
         function openBoard() {
             document.getElementById('boardOverlay').style.display = 'flex';
-            renderMessages();
+            boardList.innerHTML = `<div class="spinner mx-auto mt-10"></div>`; // Loading indicator
+            fetchMessages();
+            setTimeout(() => { boardInput.focus(); }, 100);
         }
+        function closeBoard() { document.getElementById('boardOverlay').style.display = 'none'; }
 
-        function closeBoard() {
-            document.getElementById('boardOverlay').style.display = 'none';
-        }
-
-        function postMessage() {
+        async function postMessage() {
             const text = boardInput.value.trim();
             if(!text) return;
-
-            const now = new Date();
-            const dateStr = now.toISOString().split('T')[0];
-            const randomHex = "0x" + Math.floor(Math.random()*16777215).toString(16).toUpperCase();
-
-            localMessages.push({ id: randomHex, time: dateStr, text: text });
-            localStorage.setItem('caustic_node_msgs', JSON.stringify(localMessages));
             
-            renderMessages();
-            boardInput.value = '';
+            // Generate a random ID for visual aesthetics
+            const randomHex = "0x" + Math.floor(Math.random()*16777215).toString(16).toUpperCase().padStart(6, '0');
+
+            boardInput.value = ''; // Clear input immediately for UX
+            boardInput.placeholder = "Transmitting...";
+            boardInput.disabled = true;
+
+            const { error } = await supabase.from('global_messages').insert([{ hex_id: randomHex, message: text }]);
+            
+            boardInput.disabled = false;
+            boardInput.placeholder = "Transmit thought...";
+            boardInput.focus();
+            
+            if (error) {
+                console.error("Failed to post message:", error);
+                alert("Failed to transmit. Node might be down.");
+            }
         }
 
-        boardInput.addEventListener('keypress', function(e) {
-            if(e.key === 'Enter') postMessage();
-        });
+        boardInput.addEventListener('keypress', function(e) { if(e.key === 'Enter') postMessage(); });
 
+        // Subscribe to real-time database changes
+        supabase.channel('public:global_messages')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'global_messages' }, payload => {
+                fetchMessages();
+            })
+            .subscribe();
 
-        /* RAIN LOGIC (UNTOUCHED with touch safety) */
+        /* --- TOUCH-SAFE RAIN CANVAS ENGINE --- */
         const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
         let lineArray = [];
         let lineCount = 70;
@@ -529,15 +559,15 @@
         window.addEventListener('mousedown', disruptWind);
         window.addEventListener('touchstart', disruptWind);
 
+        // --- PROGRESS AND CLIENT TIMEZONE CLOCK ---
         function updateUI() {
             const now = new Date();
             const start = new Date(now.getFullYear(), 0, 0);
             const diff = now - start;
             const percent = ((Math.floor(diff / (1000 * 60 * 60 * 24)) / 365) * 100).toFixed(1);
-            if(document.getElementById('progressText')) document.getElementById('progressText').innerText = `Exploring '26 • ${percent}%`;
+            if(document.getElementById('progressText')) document.getElementById('progressText').innerText = `Exploring '${String(now.getFullYear()).slice(-2)} • ${percent}%`;
             setTimeout(() => { if(document.getElementById('progressFill')) document.getElementById('progressFill').style.width = `${percent}%`; }, 500);
             
-            // Dynamic client timezone calculations
             if(document.getElementById('clock')) {
                 const options = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
                 const timeString = now.toLocaleTimeString([], options);
@@ -550,7 +580,6 @@
                     const offset = -now.getTimezoneOffset() / 60;
                     tzName = ` [GMT${offset >= 0 ? '+' : ''}${offset}]`;
                 }
-                
                 document.getElementById('clock').innerText = timeString + tzName;
             }
         }
