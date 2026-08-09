@@ -19,7 +19,10 @@
         html, body { background-color: #050505; margin: 0; padding: 0; color: #ffffff; min-height: 100vh; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.4s ease-out, visibility 0.4s; }
-        .spinner { width: 30px; height: 30px; border: 2px solid rgba(99, 102, 241, 0.1); border-top: 2px solid #6366f1; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        .loader-content { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .spinner-wrapper { position: relative; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; }
+        .spinner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 3px solid rgba(99, 102, 241, 0.1); border-top: 3px solid #6366f1; border-radius: 50%; animation: spin 1s linear infinite; margin: 0; }
+        .sui-img { width: 50px; height: 50px; object-fit: contain; z-index: 10; border-radius: 50%; }
         .loader-text { color: #6366f1; font-size: 9px; font-weight: 900; letter-spacing: 0.4em; text-transform: uppercase; animation: pulse 1.7s infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
@@ -28,7 +31,7 @@
         #canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; background: #050505; }
         
         .content-wrapper { position: relative; z-index: 10; width: 100%; min-height: 100dvh; display: flex; justify-content: center; padding: 60px 24px 100px 24px; pointer-events: none; }
-        .content-wrapper > div, .vault-trigger, #vaultOverlay, #bookOverlay, #terminalOverlay, #boardOverlay { pointer-events: auto; }
+        .content-wrapper > div, .vault-trigger, #vaultOverlay, #bookOverlay, #terminalOverlay { pointer-events: auto; }
 
         .glass { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 20px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
         .glass:hover { background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.6); transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.4); }
@@ -36,7 +39,7 @@
         .vault-trigger { position: fixed; top: 25px; left: 25px; z-index: 200; display: flex; align-items: center; gap: 10px; cursor: pointer; opacity: 0.6; transition: 0.3s; }
         .vault-trigger:hover { opacity: 1; color: #6366f1; }
 
-        #vaultOverlay, #bookOverlay, #terminalOverlay, #boardOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(30px); z-index: 500; display: none; flex-direction: column; align-items: center; padding: 40px 20px; overflow-y: auto; }
+        #vaultOverlay, #bookOverlay, #terminalOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); backdrop-filter: blur(30px); z-index: 500; display: none; flex-direction: column; align-items: center; padding: 40px 20px; overflow-y: auto; }
 
         /* Terminal Styling */
         #terminalOverlay { z-index: 1000; background: rgba(5,5,5,0.99); justify-content: center; }
@@ -47,20 +50,6 @@
         .term-input-line { display: flex; align-items: center; color: #6366f1; font-size: 13px; }
         .term-input-line input { background: transparent; border: none; color: #ffffff; outline: none; flex-grow: 1; margin-left: 8px; font-family: 'Fira Code', monospace; }
         
-        /* Message Board Styling */
-        #board-list { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; max-height: 60vh; overflow-y: auto; padding-right: 5px; scrollbar-width: thin; scrollbar-color: #6366f1 rgba(255,255,255,0.05); }
-        #board-list::-webkit-scrollbar { width: 4px; }
-        #board-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; }
-        #board-list::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 4px; }
-        .board-msg { background: rgba(255,255,255,0.02); border-left: 2px solid #6366f1; padding: 12px; border-radius: 4px; text-align: left; }
-        .board-meta { font-size: 9px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; display: flex; justify-content: space-between; }
-        .board-text { font-size: 12px; color: #d1d5db; line-height: 1.4; word-break: break-word; }
-        .board-input-area { width: 100%; max-width: 400px; display: flex; gap: 10px; }
-        .board-input-area input { flex-grow: 1; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; color: white; font-family: 'Inter', sans-serif; font-size: 12px; outline: none; transition: border-color 0.3s ease; }
-        .board-input-area input:focus { border-color: #6366f1; }
-        .board-btn { background: rgba(99, 102, 241, 0.1); color: #6366f1; border: 1px solid #6366f1; padding: 0 20px; border-radius: 8px; font-weight: 900; font-size: 10px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s ease; }
-        .board-btn:hover { background: #6366f1; color: #ffffff; }
-
         .btn-text { letter-spacing: 0.15em; font-size: 0.75rem; font-weight: 700; }
         .progress-bg { background: rgba(255,255,255,0.05); height: 4px; border-radius: 10px; overflow: hidden; width: 120px; margin: 8px auto; }
         .progress-fill { background: linear-gradient(90deg, #6366f1, #a5b4fc); height: 100%; width: 0%; transition: width 1.5s ease-in-out; }
@@ -80,7 +69,11 @@
 
     <div id="loader">
         <div class="loader-content">
-            <div class="spinner"></div>
+            <div class="spinner-wrapper">
+                <div class="spinner"></div>
+                <!-- You can swap 'ronaldo-sui.png' with your actual image file -->
+                <img src="ronaldo-sui.png" alt="Sui" class="sui-img" onerror="this.src='favicon.webp'">
+            </div>
             <div class="loader-text">SUIIIIIIIIIIIIIIIIIIIIIIIIIII</div>
         </div>
     </div>
@@ -122,13 +115,6 @@
                         <div class="flex items-center gap-4">
                             <i class="fas fa-terminal text-indigo-500 text-xl"></i>
                             <span class="btn-text uppercase">Terminal System</span>
-                        </div>
-                    </button>
-
-                    <button onclick="openBoard()" class="glass p-6 flex items-center justify-between group border-dashed border-green-500/40 hover:border-green-400">
-                        <div class="flex items-center gap-4">
-                            <i class="fas fa-globe text-green-500 text-xl"></i>
-                            <span class="btn-text uppercase">Global Node</span>
                         </div>
                     </button>
 
@@ -236,42 +222,13 @@
         </div>
     </div>
 
-    <div id="boardOverlay">
-        <div class="w-full max-w-xs flex justify-between items-center mb-6">
-            <h2 class="text-lg font-black tracking-widest uppercase text-green-400">Global Node</h2>
-            <button onclick="closeBoard()" class="text-white text-4xl hover:text-green-400 transition-colors">&times;</button>
-        </div>
-        <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-8 text-center max-w-xs">An open ledger. Leave your mark.</p>
-        
-        <div id="board-list"></div>
-
-        <div class="board-input-area">
-            <input type="text" id="board-msg-input" placeholder="Transmit thought..." maxlength="100">
-            <button class="board-btn" onclick="postMessage()">Send</button>
-        </div>
-    </div>
-
     <script>
-        // --- DATABASE INITIALIZATION FIX ---
-        // We use dbClient instead of supabase to avoid naming conflicts with the CDN script
-        let dbClient = null;
-        try {
-            const SUPABASE_URL = "https://ihvpbpndcspobhlhnees.supabase.co"; 
-            const SUPABASE_KEY = "sb_publishable_9ahvNOumSFZOmqTBi2J1Hw_McxvuJub";
-            if (window.supabase) {
-                dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            }
-        } catch(e) {
-            console.error("Database connection failed", e);
-        }
-
         const vaultData = {
             divine: [{t:"94:5",c:"For indeed, with hardship [will be] ease."},{t:"13:28",c:"By the remembrance of Allah do hearts find peace."},{t:"2:286",c:"Allah does not burden a soul beyond that it can bear."},{t:"39:53",c:"Do not despair of the mercy of Allah."},{t:"65:3",c:"He will provide from where he does not expect."},{t:"57:3",c:"He is the First and the Last."},{t:"29:69",c:"We will surely guide them to Our ways."},{t:"2:153",c:"Indeed, Allah is with the patient."},{t:"42:19",c:"Allah is Subtle with His servants."},{t:"14:7",c:"If you are grateful, I will increase you."}],
             logic: [{t:"Socrates",c:"The unexamined life is not worth living."},{t:"Aurelius",c:"Everything we see is a perspective, not the truth."},{t:"Al-Ghazali",c:"Declare jihad on ego, pride, and greed."},{t:"Bacon",c:"Silence nourishes wisdom."},{t:"Nietzsche",c:"He who has a why to live can bear almost any how."},{t:"Descartes",c:"I think, therefore I am."},{t:"Rumi",c:"The wound is where the light enters."},{t:"Fragment",c:"Call things by their right names."},{t:"Stoic",c:"Power over your mind—not outside events."},{t:"Caustic",c:"Truth is bitter medicine, but the only cure."}],
             science: [{t:"E=mc²",c:"Mass-Energy",s:"Matter is condensed energy."},{t:"φ (1.618)",c:"Golden Ratio",s:"The universal code of beauty."},{t:"0 Kelvin",c:"Absolute Zero",s:"Atomic motion stops."},{t:"π (3.141)",c:"Pi",s:"The infinite circle ratio."},{t:"F=ma",c:"Newton II",s:"Force = Mass x Acceleration."},{t:"ΔS ≥ 0",c:"Entropy",s:"Universe moves toward disorder."},{t:"c",c:"Light Speed",s:"299,792,458 m/s."},{t:"eⁱπ + 1 = 0",c:"Euler",s:"Connecting 5 fundamental constants."},{t:"Uncertainty",c:"Heisenberg",s:"Cannot know position and momentum perfectly."},{t:"Fibonacci",c:"Growth",s:"Nature's numbering code."}]
         };
 
-        // ENTIRE ORIGINAL FRAGMENT ARRAY RESTORED
         const fragments = [ "Logic is the shield.", "Control the ego.", "Truth is absolute.", "Knowledge is light.", "Reality is a construct.", "Stay caustic.", "Action over overthinking.", "Done is better than perfect.", "Momentum builds motivation.", "Consistency > Intensity.", "Slow progress is still progress.", "Fall seven times, stand up eight.", "Win the morning, win the day.", "Discipline > Motivation.", "Don’t stop until you’re proud.", "Focus on the how, not the what if.", "Your only limit is your mind.", "Tiny habits, big results.", "Start where you are.", "Own the day.", "Precision is power.", "Silence is an answer.", "Master the routine.", "Embrace the friction.", "Efficiency is life.", "No excuses, only data.", "Focus is a muscle.", "Adapt or expire.", "Keep the edge sharp.", "Endure and survive.", "Output over input.", "Calculated risks only.", "Emotions are variables.", "Solve the problem.", "Stay cold, stay focused.", "Victory is in the details.", "Time is the only currency.", "Kill the distractions.", "Build the machine.", "Execution is everything.", "Do not hesitate.", "Analyze, then act.", "Strength is earned.", "Hard reset the mind.", "Minimize the noise.", "Results over intentions.", "Stay objective.", "Burn the ships.", "Move with purpose.", "Game the system.", "Default to action.", "Sharpen the blade.", "Reject mediocrity.", "Entropy is the enemy.", "Seek the truth.", "Limit the chatter.", "Work in silence.", "Let results speak.", "Unleash the grind.", "Patterns never lie.", "Master the self.", "Break the loop.", "Refine the process.", "Obsession wins.", "Ignore the critics.", "Stay hungry.", "No easy days.", "Be the anomaly.", "Calculated execution.", "Eyes on the code.", "Think deeper.", "Fear is a ghost.", "Grind until it works.", "Optimized for success.", "The ego is a virus.", "Stay clinical.", "Zero distractions.", "Mental fortress.", "Crush the doubt.", "Beyond the limits.", "Logic above all.", "Fuel the fire.", "Pressure creates gems.", "Destroy the comfort zone.", "Stay lethal.", "Focus like a laser.", "The work is the way.", "No shortcuts.", "High stakes, high focus.", "Outwork everyone.", "Build the legacy.", "Armor the mind.", "Pure output.", "Scale the mountain.", "Stay relentless.", "Hunt the goal.", "Evolve or fail.", "Control the narrative.", "The mission is all.", "Stay dangerous.", "Iterate and improve.", "Delete the clutter.", "Upgrade the software.", "Stay sovereign.", "Logic doesn't blink.", "Earn your sleep.", "Complexity is a trap.", "Simple is lethal.", "Attack the day.", "Be the architect.", "Willpower is finite.", "Code your future.", "Live with intent.", "Master the chaos.", "Forge the path.", "Iron sharpens iron.", "Think in systems.", "Reject the average.", "Speed is an asset.", "Stay anonymous.", "Grind in the dark.", "Logic is the compass.", "No white flags.", "Power through.", "Strictly business.", "Verify everything.", "Trust the data.", "Build the empire.", "Eyes on the prize.", "Defy the odds.", "Keep moving.", "Hustle harder.", "Stay vigilant.", "Logic over luck.", "Calculated aggression.", "Refine the craft.", "Solidify the plan.", "Crush the ego.", "Evolve the mind.", "Pure efficiency.", "The goal is clear.", "Eliminate weakness.", "Standardize excellence.", "Be the storm.", "Outlast the rest.", "The clock is ticking.", "Execute the vision.", "Fortify the will.", "Logic is king.", "Success is binary.", "One task at a time.", "Stay unbreakable.", "No room for error.", "Target acquired.", "Stay focused.", "Work the plan.", "Finish the job.", "Break the chains.", "Own the outcome.", "Zero margin for error.", "Maximize potential.", "The grind is internal.", "Seek discomfort.", "Apathy is death.", "Curiosity is fuel.", "Remain detached.", "High performance only.", "Unfuck your mind.", "Master the basics.", "Build on bedrock.", "Filter the input.", "Protect the vision.", "Stay sharp, stay humble.", "Relentless pursuit.", "No plan B.", "Obsess over quality.", "Mastery takes time.", "Earn the win.", "Face the facts.", "No emotional debt.", "Stay mission-driven.", "Act with intent.", "Discipline is freedom.", "Keep your head down.", "Let the work show.", "Cut the dead weight.", "Slay the ego.", "Focus on the next rep.", "Mind like water.", "Body like iron.", "Will like steel.", "Deep work only.", "Eliminate the non-essential.", "Stay on the path.", "The obstacles are the way.", "Win from within.", "No handouts.", "Calculated persistence.", "Be your own hero.", "Logic over feelings.", "The code is life.", "Debug the routine.", "Iterate to perfection.", "Never settle.", "Keep the fire burning.", "Stay in the zone.", "Master the trade.", "Push the limit.", "Exceed expectations.", "No mercy for laziness.", "The grind is constant.", "Rise and grind.", "Make it happen.", "Stay frosty.", "Keep it moving.", "Level up.", "Be the expert.", "No excuses permitted.", "Stay intense.", "Focus on the prize.", "Earn your place.", "The future is earned.", "Work while they sleep.", "Learn while they party.", "Live like they won't.", "Win like they can't.", "Stay gritty.", "Hard work is the base.", "Execute without emotion.", "Systematic success.", "The data is king.", "Find the bug.", "Fix the bug.", "Ship the code.", "Stay proactive.", "No reactive moves.", "Anticipate the hit.", "Absorb the blow.", "Counter with logic.", "Stay steady.", "Breathe through the pressure.", "Focus on the solution.", "Problem-solving mindset.", "The truth sets the pace.", "Logic is a weapon.", "Arm yourself with knowledge.", "Read the manual.", "Master the tools.", "Be the toolmaker.", "Build the infrastructure.", "Own the system.", "Stay modular.", "Scalable growth only.", "Minimize latency.", "Optimize the path.", "Remove the friction.", "Logic is the filter.", "Stay objective at all costs.", "Truth hurts, lies kill.", "The ego is a liar.", "Silence is tactical.", "Listen more, talk less.", "Knowledge is currency.", "Spend it wisely.", "Invest in yourself.", "The compounding effect.", "Consistency wins wars.", "Discipline wins lives.", "Be the exception.", "Reject the status quo.", "Think for yourself.", "Logic is your sovereign.", "Stay centered.", "Focus on the core.", "Strip away the fluff.", "The essence is enough.", "Quality over quantity.", "Less but better.", "Precision is the goal.", "Hit the target.", "Reset and repeat.", "The loop is life.", "Refine the loop.", "Break the bad loops.", "Install the good loops.", "Software for the soul.", "Hardcore discipline.", "No compromise.", "Stay authentic.", "Logic doesn't care.", "Reality is cold.", "Warm it with work.", "Build your own world.", "Construct the reality.", "Code the dream.", "Execute the nightmare.", "Stay awake.", "Eyes open.", "Mind sharp.", "Heart cold.", "Will strong.", "Be the master.", "Slave to no one.", "Sovereign of self.", "Logic is the law.", "Control the variables.", "Minimize the risk.", "Maximize the reward.", "Calculated moves only.", "Stay tactical.", "Strategic patience.", "Aggressive execution.", "The blend is key.", "Stay balanced.", "Focus on the now.", "The past is data.", "The future is a projection.", "The present is the input.", "Input leads to output.", "Better input, better life.", "Garbage in, garbage out.", "Clean the stream.", "Logic is the filter.", "Stay pure.", "The path is narrow.", "The reward is wide.", "Stay focused on the gate.", "Open the door.", "Walk through.", "Don't look back.", "Burn the bridges.", "Only forward.", "Speed and power.", "The grind is a privilege.", "Love the struggle.", "Respect the process.", "Honor the work.", "The work is sacred.", "Stay devoted.", "Focus is a prayer.", "Execution is an offering.", "Results are the blessing.", "Stay humble in victory.", "Stay stoic in defeat.", "Logic is the anchor.", "Truth is the sail.", "Knowledge is the wind.", "Reality is the sea.", "Navigate the storm.", "Be the captain.", "Control the ship.", "Stay on course.", "No distractions on deck.", "Eyes on the horizon.", "Land is earned.", "Keep rowing.", "Logic is the rhythm.", "Stay in sync.", "Master the tempo.", "Control the speed.", "Slow is smooth.", "Smooth is fast.", "Fast is lethal.", "Stay lethal.", "Logic is the edge.", "The blade is you.", "Stay sharp.", "Cut through the noise.", "Direct hit.", "No wasted motion.", "Efficiency is beauty.", "The code is art.", "Stay artistic.", "Logic is the canvas.", "Knowledge is the paint.", "Execution is the brush.", "Reality is the masterpiece.", "Own the gallery.", "Build the legacy.", "Stay legendary.", "Logic is the myth.", "Truth is the reality.", "Knowledge is the power.", "Control is the key.", "Stay in command.", "The system is yours.", "Access granted.", "Root access only.", "Stay admin.", "No guest access.", "Protect the kernel.", "Logic is the firewall.", "Stay secure.", "Truth is the encryption.", "Knowledge is the key.", "Reality is the server.", "Keep it running.", "Zero downtime.", "Maximum uptime.", "Stay online.", "The grind never sleeps.", "Logic is the wake-up call.", "Stay alert.", "Stay awake.", "Stay caustic.", "Logic is the shield.", "Control the ego.", "Truth is absolute.", "Knowledge is light.", "Reality is a construct.", "Stay caustic.", "Action over overthinking.", "Done is better than perfect.", "Momentum builds motivation.", "Consistency > Intensity.", "Slow progress is still progress.", "Fall seven times, stand up eight.", "Win the morning, win the day.", "Discipline > Motivation.", "Don’t stop until you’re proud.", "Focus on the how, not the what if.", "Your only limit is your mind.", "Tiny habits, big results.", "Start where you are.", "Own the day.", "Logic is the shield.", "The grind continues.", "Final directive: Win." ];
 
         function delayedLink(url) { setTimeout(() => { window.open(url, '_blank'); }, 400); }
@@ -355,83 +312,6 @@
                 this.value = '';
             }
         });
-
-        // --- GLOBAL REALTIME NODE ENGINE ---
-        const boardList = document.getElementById('board-list');
-        const boardInput = document.getElementById('board-msg-input');
-
-        async function fetchMessages() {
-            if(!dbClient) {
-                boardList.innerHTML = `<div class="text-[10px] text-red-500 font-mono tracking-wider text-center p-4">DATABASE CONNECTION FAILED.</div>`;
-                return;
-            }
-            const { data, error } = await dbClient.from('global_messages').select('*').order('created_at', { ascending: true });
-            if (error) {
-                console.error("Database connection error:", error);
-                boardList.innerHTML = `<div class="text-[10px] text-red-500 font-mono tracking-wider text-center p-4">ERROR READING NODE. CHECK CONSOLE.</div>`;
-            } else {
-                renderMessages(data);
-            }
-        }
-
-        function renderMessages(messages) {
-            boardList.innerHTML = '';
-            if(!messages || messages.length === 0) {
-                boardList.innerHTML = `<p class="text-[10px] text-gray-600 text-center uppercase tracking-widest p-4">Node Empty. Be first.</p>`;
-                return;
-            }
-            messages.forEach(msg => {
-                const dateStr = new Date(msg.created_at).toISOString().split('T')[0];
-                boardList.innerHTML += `
-                    <div class="board-msg">
-                        <div class="board-meta"><span>ID: ${msg.hex_id}</span><span>${dateStr}</span></div>
-                        <div class="board-text">${msg.message}</div>
-                    </div>
-                `;
-            });
-            boardList.scrollTop = boardList.scrollHeight;
-        }
-
-        function openBoard() {
-            document.getElementById('boardOverlay').style.display = 'flex';
-            boardList.innerHTML = `<div class="spinner mx-auto mt-10"></div>`; 
-            fetchMessages();
-            setTimeout(() => { boardInput.focus(); }, 100);
-        }
-        function closeBoard() { document.getElementById('boardOverlay').style.display = 'none'; }
-
-        async function postMessage() {
-            if(!dbClient) return alert("Database is not connected.");
-            const text = boardInput.value.trim();
-            if(!text) return;
-            
-            const randomHex = "0x" + Math.floor(Math.random()*16777215).toString(16).toUpperCase().padStart(6, '0');
-
-            boardInput.value = ''; 
-            boardInput.placeholder = "Transmitting...";
-            boardInput.disabled = true;
-
-            const { error } = await dbClient.from('global_messages').insert([{ hex_id: randomHex, message: text }]);
-            
-            boardInput.disabled = false;
-            boardInput.placeholder = "Transmit thought...";
-            boardInput.focus();
-            
-            if (error) {
-                console.error("Failed to post message:", error);
-                alert("Failed to transmit. Node might be down.");
-            }
-        }
-
-        boardInput.addEventListener('keypress', function(e) { if(e.key === 'Enter') postMessage(); });
-
-        if(dbClient) {
-            dbClient.channel('public:global_messages')
-                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'global_messages' }, payload => {
-                    fetchMessages();
-                })
-                .subscribe();
-        }
 
         const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
         let lineArray = [];
