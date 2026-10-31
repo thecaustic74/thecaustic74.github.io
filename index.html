@@ -9,7 +9,7 @@
     <title>The Caustic 74 | Live</title>
     
     <link rel="icon" type="image/webp" href="favicon.webp">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -21,9 +21,9 @@
             --accent-blue: #0297DE;
             --accent-orange: #FC734D;
             --surface-glass: rgba(2, 151, 222, 0.03);
-            --surface-border: rgba(2, 151, 222, 0.15);
+            --surface-border: rgba(2, 151, 222, 0.12);
             --surface-hover: rgba(2, 151, 222, 0.08);
-            --glow-blue: rgba(2, 151, 222, 0.3);
+            --glow-blue: rgba(2, 151, 222, 0.25);
             --glow-orange: rgba(252, 115, 77, 0.3);
         }
 
@@ -41,42 +41,90 @@
 
         #canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; background: var(--bg-primary); }
         
-        .content-wrapper { position: relative; z-index: 10; width: 100%; min-height: 100dvh; display: flex; justify-content: center; padding: 60px 24px 100px 24px; pointer-events: none; }
-        .content-wrapper > div, .vault-trigger, #vaultOverlay, #bookOverlay, #terminalOverlay { pointer-events: auto; }
+        /* SaaS Aura background glow matching reference */
+        .saas-aura {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(2, 151, 222, 0.15) 0%, rgba(252, 115, 77, 0.08) 40%, transparent 70%);
+            filter: blur(80px);
+            z-index: 1;
+            pointer-events: none;
+        }
 
-        .glass { background: var(--surface-glass); border: 1px solid var(--surface-border); backdrop-filter: blur(15px); border-radius: 20px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
-        .glass:hover { background: var(--surface-hover); border: 1px solid var(--accent-blue); transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 30px -10px var(--glow-blue); }
+        .content-wrapper { position: relative; z-index: 10; width: 100%; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px 100px 20px; pointer-events: none; }
+        .content-wrapper > *, #vaultOverlay, #bookOverlay, #terminalOverlay { pointer-events: auto; }
 
-        .vault-trigger { position: fixed; top: 25px; left: 25px; z-index: 200; display: flex; align-items: center; gap: 10px; cursor: pointer; opacity: 0.6; transition: 0.3s; }
-        .vault-trigger:hover { opacity: 1; color: var(--accent-blue); }
+        /* Glassmorphism Bento Cards */
+        .bento-card {
+            background: linear-gradient(135deg, rgba(2, 151, 222, 0.04) 0%, rgba(2, 7, 10, 0.75) 100%);
+            border: 1px solid var(--surface-border);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .bento-card:hover {
+            background: linear-gradient(135deg, rgba(2, 151, 222, 0.08) 0%, rgba(2, 7, 10, 0.85) 100%);
+            border-color: var(--accent-blue);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px -10px var(--glow-blue);
+        }
+
+        /* Top Navigation Header */
+        .saas-nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 900px;
+            background: rgba(2, 7, 10, 0.8);
+            border: 1px solid var(--surface-border);
+            backdrop-filter: blur(25px);
+            border-radius: 100px;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 200;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
 
         #vaultOverlay, #bookOverlay, #terminalOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 7, 10, 0.98); backdrop-filter: blur(30px); z-index: 500; display: none; flex-direction: column; align-items: center; padding: 40px 20px; overflow-y: auto; }
 
         /* Terminal Styling */
         #terminalOverlay { z-index: 1000; background: rgba(2, 7, 10, 0.99); justify-content: center; }
-        .term-container { width: 100%; max-width: 500px; background: rgba(2, 7, 10, 0.9); border: 1px solid var(--accent-blue); padding: 20px; border-radius: 8px; font-family: 'Fira Code', monospace; box-shadow: 0 0 25px var(--glow-blue); }
-        .term-header { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--accent-blue); padding-bottom: 10px; margin-bottom: 15px; }
+        .term-container { width: 100%; max-width: 550px; background: rgba(2, 7, 10, 0.95); border: 1px solid var(--accent-blue); padding: 24px; border-radius: 16px; font-family: 'Fira Code', monospace; box-shadow: 0 0 35px var(--glow-blue); }
+        .term-header { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--accent-blue); padding-bottom: 12px; margin-bottom: 15px; }
         .term-close-btn { cursor: pointer; color: var(--accent-orange); font-weight: bold; }
-        #terminal-output { color: #93c5fd; font-size: 13px; line-height: 1.5; margin-bottom: 15px; max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        #terminal-output { color: #93c5fd; font-size: 13px; line-height: 1.6; margin-bottom: 15px; max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .term-input-line { display: flex; align-items: center; color: var(--accent-blue); font-size: 13px; }
         .term-input-line input { background: transparent; border: none; color: #ffffff; outline: none; flex-grow: 1; margin-left: 8px; font-family: 'Fira Code', monospace; }
         
         .btn-text { letter-spacing: 0.15em; font-size: 0.75rem; font-weight: 700; }
-        .progress-bg { background: rgba(255,255,255,0.05); height: 4px; border-radius: 10px; overflow: hidden; width: 120px; margin: 8px auto; }
+        .progress-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 10px; overflow: hidden; width: 100%; margin: 12px 0 6px 0; }
         .progress-fill { background: linear-gradient(90deg, var(--accent-blue), var(--accent-orange)); height: 100%; width: 0%; transition: width 1.5s ease-in-out; }
         .num-icon { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; border: 1px solid rgba(255,255,255,0.2); }
         .fa-instagram { background: -webkit-linear-gradient(#f9ce34, #ee2a7b, #6228d7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Premium Vault Item Styling */
+        /* Vault Item Styling */
         .vault-item-card {
             background: linear-gradient(135deg, rgba(2, 151, 222, 0.04) 0%, rgba(2, 7, 10, 0.6) 100%);
             border: 1px solid rgba(2, 151, 222, 0.15);
             border-left: 3px solid var(--accent-blue);
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 18px;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            width: 100%;
+            max-width: 450px;
         }
         .vault-item-card:hover {
             border-color: var(--accent-blue);
@@ -113,127 +161,188 @@
         </div>
     </div>
 
-    <div class="vault-trigger" onclick="openVault()">
-        <i class="fas fa-bars text-xl"></i>
-        <span class="text-[9px] font-black tracking-[0.3em] uppercase">The Vault</span>
-    </div>
+    <!-- SaaS Navigation Bar -->
+    <nav class="saas-nav">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="openVault()">
+            <div class="w-2.5 h-2.5 rounded-full bg-[var(--accent-orange)] animate-pulse"></div>
+            <span class="text-xs font-black tracking-[0.25em] uppercase">The Caustic 74</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="openVault()" class="text-[10px] font-bold tracking-widest uppercase px-4 py-1.5 rounded-full border border-[var(--surface-border)] hover:border-[var(--accent-blue)] transition-all text-gray-300 hover:text-white">
+                <i class="fas fa-vault mr-1.5 text-[var(--accent-blue)]"></i> Vault
+            </button>
+        </div>
+    </nav>
 
+    <div class="saas-aura"></div>
     <canvas id="canvas"></canvas>
     
     <div class="content-wrapper">
-        <div class="max-w-sm md:max-w-4xl w-full flex flex-col md:flex-row gap-10 md:gap-20 items-center md:items-start">
-            
-            <div class="text-center md:text-left md:w-1/3 md:sticky md:top-20">
-                <img src="favicon.webp" class="w-24 h-24 md:w-32 md:h-32 rounded-full mx-auto md:mx-0 border-2 border-white/10 shadow-xl mb-6" alt="Profile" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\' fill=\'%230297DE\'><circle cx=\'50\' cy=\'50\' r=\'40\'/></svg>'">
-                <h1 class="text-xl md:text-3xl font-black tracking-widest uppercase">The Caustic 74</h1>
-                
-                <div class="mt-4">
-                    <div id="progressText" class="text-[10px] font-bold tracking-[0.2em] uppercase" style="color: var(--accent-blue);">Exploring '26 • 0%</div>
-                    <div class="progress-bg md:mx-0"><div id="progressFill" class="progress-fill"></div></div>
-                </div>
-                
-                <div id="clock" class="text-[13px] font-mono text-gray-500 mt-2 tracking-widest">00:00:00 [GMT]</div>
+        <!-- SaaS Hero Title Area -->
+        <div class="text-center mt-24 mb-12 max-w-2xl px-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--surface-border)] border border-[var(--accent-blue)]/30 text-[10px] font-bold tracking-[0.3em] uppercase text-[var(--accent-blue)] mb-4">
+                <i class="fas fa-terminal"></i> System Online // v2.0
+            </div>
+            <h1 class="text-3xl md:text-5xl font-black tracking-wider uppercase mb-4 bg-gradient-to-r from-white via-gray-200 to-[var(--accent-blue)] bg-clip-text text-transparent">
+                Execute at the Speed of Logic.
+            </h1>
+            <p class="text-[13px] md:text-sm text-gray-400 italic max-w-lg mx-auto leading-relaxed font-medium">
+                "It is better to be hated for who you are than to be loved for someone you are not."
+            </p>
+        </div>
 
-                <div class="mt-8 px-6 md:px-0">
-                    <p class="text-[12px] md:text-[13px] text-gray-400 italic leading-relaxed tracking-wide font-medium">
-                        "It is better to be hated for who you are than to be loved for someone you are not."
-                    </p>
-                    <div class="h-[1px] w-8 mx-auto md:mx-0 mt-6" style="background: var(--accent-blue);"></div>
+        {/* Bento Grid Layout */}
+        <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            {/* Profile & Live Status Bento Card (Span 1) */}
+            <div class="bento-card p-6 flex flex-col justify-between md:col-span-1">
+                <div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="favicon.webp" class="w-16 h-16 rounded-full border-2 border-[var(--accent-blue)]/40 shadow-xl object-cover" alt="Profile" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\' fill=\'%230297DE\'><circle cx=\'50\' cy=\'50\' r=\'40\'/></svg>'">
+                        <div>
+                            <h2 class="text-base font-black tracking-widest uppercase">Caustic 74</h2>
+                            <p class="text-[10px] text-[var(--accent-orange)] font-bold tracking-widest uppercase mt-0.5">Core Architect</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div id="progressText" class="text-[10px] font-bold tracking-[0.2em] uppercase text-[var(--accent-blue)]">Exploring '26 • 0%</div>
+                        <div class="progress-bg"><div id="progressFill" class="progress-fill"></div></div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-white/5 flex items-center justify-between">
+                    <span class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Local Time</span>
+                    <div id="clock" class="text-[12px] font-mono text-[var(--accent-orange)] tracking-widest">00:00:00</div>
                 </div>
             </div>
-            
-            <div class="w-full md:w-2/3">
-                <h3 class="hidden md:block text-[10px] font-black tracking-[0.4em] uppercase mb-8" style="color: var(--accent-blue);">System Access</h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <button onclick="runTerminal()" class="glass p-6 flex items-center justify-between group" style="border-style: dashed; border-color: rgba(2, 151, 222, 0.4);">
-                        <div class="flex items-center gap-4">
-                            <i class="fas fa-terminal text-xl" style="color: var(--accent-blue);"></i>
-                            <span class="btn-text uppercase">Terminal System</span>
-                        </div>
-                    </button>
 
-                    <div onclick="delayedLink('https://www.instagram.com/thecaustic74')" class="glass p-5 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <i class="fab fa-instagram text-lg"></i>
-                            <span class="btn-text uppercase">Instagram</span>
-                        </div>
-                        <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
+            {/* Interactive Terminal System Bento Card (Span 2) */}
+            <div onclick="runTerminal()" class="bento-card p-8 flex flex-col justify-between md:col-span-2 group border-dashed border-[var(--accent-blue)]/40">
+                <div class="flex justify-between items-start">
+                    <div class="w-12 h-12 rounded-2xl bg-[var(--accent-blue)]/10 border border-[var(--accent-blue)]/30 flex items-center justify-center text-[var(--accent-blue)] text-xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-terminal"></i>
                     </div>
-
-                    <div onclick="delayedLink('https://myanimelist.net/profile/thecaustic74')" class="glass p-5 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-play-circle text-[#2e51a2] text-lg"></i>
-                            <span class="btn-text uppercase">MyAnimeList</span>
-                        </div>
-                        <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
-                    </div>
-                    
-                    <div onclick="delayedLink('https://discord.com/users/1452742087303762054')" class="glass p-5 flex items-center justify-between md:col-span-2">
-                        <div class="flex items-center gap-3">
-                            <i class="fab fa-discord text-[#5865F2] text-lg"></i>
-                            <span class="btn-text uppercase">Discord</span>
-                        </div>
-                        <i class="fas fa-external-link-alt text-[10px] text-gray-600"></i>
-                    </div>
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-[var(--accent-orange)] bg-[var(--accent-orange)]/10 px-3 py-1 rounded-full border border-[var(--accent-orange)]/20">Interactive Shell</span>
+                </div>
+                <div class="my-6">
+                    <h3 class="text-xl font-black uppercase tracking-wider mb-2">Terminal System Access</h3>
+                    <p class="text-xs text-gray-400 leading-relaxed font-medium">Execute command-line queries for logic fragments, divine verses, and scientific constants in real-time.</p>
+                </div>
+                <div class="flex items-center gap-2 text-xs font-mono text-[var(--accent-blue)] font-bold">
+                    <span>root@caustic74:~# /init_terminal</span>
+                    <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
                 </div>
             </div>
+
+            {/* Instagram Bento Card */}
+            <div onclick="delayedLink('https://www.instagram.com/thecaustic74')" class="bento-card p-6 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-lg">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <div>
+                        <span class="btn-text uppercase block font-bold">Instagram</span>
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Visual Feed</span>
+                    </div>
+                </div>
+                <i class="fas fa-external-link-alt text-xs text-gray-500"></i>
+            </div>
+
+            {/* MyAnimeList Bento Card */}
+            <div onclick="delayedLink('https://myanimelist.net/profile/thecaustic74')" class="bento-card p-6 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center text-lg text-[#2e51a2]">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <div>
+                        <span class="btn-text uppercase block font-bold">MyAnimeList</span>
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Watchlists</span>
+                    </div>
+                </div>
+                <i class="fas fa-external-link-alt text-xs text-gray-500"></i>
+            </div>
+
+            {/* Discord Bento Card */}
+            <div onclick="delayedLink('https://discord.com/users/1452742087303762054')" class="bento-card p-6 flex items-center justify-between md:col-span-1">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-[#5865F2]/10 border border-[#5865F2]/20 flex items-center justify-center text-lg text-[#5865F2]">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <div>
+                        <span class="btn-text uppercase block font-bold">Discord</span>
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Direct Link</span>
+                    </div>
+                </div>
+                <i class="fas fa-external-link-alt text-xs text-gray-500"></i>
+            </div>
+
         </div>
     </div>
+
+    <!-- Vault Overlay Modal -->
     <div id="vaultOverlay">
         <div class="w-full max-w-md flex justify-between items-center mb-8 px-4">
-            <h2 class="text-lg font-black tracking-widest uppercase">The Vault</h2>
-            <button onclick="closeVault()" class="text-white text-4xl hover:text-[var(--accent-blue)] transition-colors">&times;</button>
+            <h2 class="text-lg font-black tracking-widest uppercase flex items-center gap-2">
+                <i class="fas fa-vault text-[var(--accent-blue)]"></i> The Vault
+            </h2>
+            <button onclick="closeVault()" class="text-white text-4xl hover:text-[var(--accent-orange)] transition-colors">&times;</button>
         </div>
 
-        <div class="w-full max-w-md px-4">
-            <div onclick="openBooks()" class="glass w-full p-6 mb-8 flex items-center justify-between group">
+        <div class="w-full max-w-md px-4 mb-6">
+            <div onclick="openBooks()" class="bento-card w-full p-5 flex items-center justify-between group">
                 <div class="flex items-center gap-4">
-                    <i class="fas fa-book text-xl" style="color: var(--accent-orange);"></i>
-                    <span class="btn-text uppercase">The Archives</span>
+                    <div class="w-10 h-10 rounded-xl bg-[var(--accent-orange)]/10 border border-[var(--accent-orange)]/20 flex items-center justify-center text-[var(--accent-orange)]">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div>
+                        <span class="btn-text uppercase block font-bold">The Archives</span>
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Reading List</span>
+                    </div>
                 </div>
-                <i class="fas fa-chevron-right text-gray-600 group-hover:text-white transition-colors"></i>
+                <i class="fas fa-chevron-right text-gray-500 group-hover:text-white transition-colors"></i>
             </div>
         </div>
 
         <div id="folder-directory" class="w-full max-w-md space-y-4 px-4">
-            <div onclick="openFolder('divine')" class="glass p-6 border-l-4 border-yellow-500 flex justify-between items-center group cursor-pointer">
+            <div onclick="openFolder('divine')" class="bento-card p-5 border-l-4 border-yellow-500 flex justify-between items-center group cursor-pointer">
                 <div><p class="text-[10px] font-black uppercase tracking-widest text-yellow-400">Quran_verses</p><p class="text-[9px] text-gray-400 uppercase mt-1">10 Verses</p></div>
                 <i class="fas fa-folder-open text-gray-600 group-hover:text-yellow-400 transition-colors"></i>
             </div>
-            <div onclick="openFolder('logic')" class="glass p-6 border-l-4 flex justify-between items-center group cursor-pointer" style="border-left-color: var(--accent-blue);">
-                <div><p class="text-[10px] font-black uppercase tracking-widest" style="color: var(--accent-blue);">Logic_Core</p><p class="text-[9px] text-gray-400 uppercase mt-1">10 Fragments</p></div>
+            <div onclick="openFolder('logic')" class="bento-card p-5 border-l-4 flex justify-between items-center group cursor-pointer" style="border-left-color: var(--accent-blue);">
+                <div><p class="text-[10px] font-black uppercase tracking-widest text-[var(--accent-blue)]">Logic_Core</p><p class="text-[9px] text-gray-400 uppercase mt-1">10 Fragments</p></div>
                 <i class="fas fa-folder-open text-gray-600 group-hover:text-[var(--accent-blue)] transition-colors"></i>
             </div>
-            <div onclick="openFolder('science')" class="glass p-6 border-l-4 flex justify-between items-center group cursor-pointer" style="border-left-color: var(--accent-orange);">
-                <div><p class="text-[10px] font-black uppercase tracking-widest" style="color: var(--accent-orange);">Science_Units</p><p class="text-[9px] text-gray-400 uppercase mt-1">10 Solutions</p></div>
+            <div onclick="openFolder('science')" class="bento-card p-5 border-l-4 flex justify-between items-center group cursor-pointer" style="border-left-color: var(--accent-orange);">
+                <div><p class="text-[10px] font-black uppercase tracking-widest text-[var(--accent-orange)]">Science_Units</p><p class="text-[9px] text-gray-400 uppercase mt-1">10 Solutions</p></div>
                 <i class="fas fa-folder-open text-gray-600 group-hover:text-[var(--accent-orange)] transition-colors"></i>
             </div>
         </div>
 
         <div id="folder-items" class="w-full max-w-md hidden space-y-4 px-4">
-            <button onclick="backToDirectory()" class="text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2 hover:text-white transition-colors" style="color: var(--accent-blue);">
+            <button onclick="backToDirectory()" class="text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2 hover:text-white transition-colors text-[var(--accent-blue)]">
                 <i class="fas fa-arrow-left"></i> Return to Directory
             </button>
-            <div id="items-injection-point" class="space-y-4 pb-20"></div>
+            <div id="items-injection-point" class="space-y-4 pb-20 flex flex-col items-center"></div>
         </div>
     </div>
 
+    <!-- Archives Modal -->
     <div id="bookOverlay">
         <div class="w-full max-w-xs flex justify-between items-center mb-10">
             <h2 class="text-lg font-black tracking-widest uppercase">The Archives</h2>
-            <button onclick="closeBooks()" class="text-white text-4xl hover:text-[var(--accent-blue)] transition-colors">&times;</button>
+            <button onclick="closeBooks()" class="text-white text-4xl hover:text-[var(--accent-orange)] transition-colors">&times;</button>
         </div>
         <div class="w-full max-w-xs space-y-4">
-            <div class="glass p-4 flex items-center gap-5">
+            <div class="bento-card p-4 flex items-center gap-5">
                 <div class="num-icon bg-green-500/10 text-green-400 border-green-500/30">1</div>
                 <div><p class="text-[8px] text-green-500 font-bold uppercase tracking-widest">History</p><p class="text-sm font-bold">Ar-Raheequl Makhtum</p></div>
             </div>
-            <div class="glass p-4 flex items-center gap-5">
-                <div class="num-icon text-indigo-400 border-indigo-500/30" style="background: rgba(2, 151, 222, 0.1); color: var(--accent-blue);">2</div>
-                <div><p class="text-[8px] font-bold uppercase tracking-widest" style="color: var(--accent-blue);">Logic</p><p class="text-sm font-bold">Paradoxical Sajid</p></div>
+            <div class="bento-card p-4 flex items-center gap-5">
+                <div class="num-icon text-[var(--accent-blue)] border-[var(--accent-blue)]/30" style="background: rgba(2, 151, 222, 0.1);">2</div>
+                <div><p class="text-[8px] font-bold uppercase tracking-widest text-[var(--accent-blue)]">Logic</p><p class="text-sm font-bold">Paradoxical Sajid</p></div>
             </div>
-            <div class="glass p-4 flex items-center gap-5">
+            <div class="bento-card p-4 flex items-center gap-5">
                 <div class="num-icon bg-red-500/10 text-red-400 border-red-500/30">3</div>
                 <div><p class="text-[8px] text-red-500 font-bold uppercase tracking-widest">Resilience</p><p class="text-sm font-bold">La Tahzan</p></div>
             </div>
@@ -241,10 +350,11 @@
         <button onclick="closeBooks()" class="mt-12 text-[10px] text-gray-500 uppercase tracking-[0.3em] font-bold hover:text-white transition-colors">Back</button>
     </div>
 
+    <!-- Terminal Overlay Modal -->
     <div id="terminalOverlay">
         <div class="term-container">
             <div class="term-header">
-                <span class="text-[10px] uppercase tracking-widest font-bold" style="color: var(--accent-blue);">CAUSTIC.OS // SYS_TERM</span>
+                <span class="text-[10px] uppercase tracking-widest font-bold text-[var(--accent-blue)]">CAUSTIC.OS // SYS_TERM</span>
                 <span class="term-close-btn" onclick="closeTerminal()">[X]</span>
             </div>
             <div id="terminal-output">
@@ -283,7 +393,7 @@
                 div.className = item.s ? 'vault-item-card has-spec' : 'vault-item-card';
                 div.innerHTML = `
                     <div class="flex justify-between items-start mb-2">
-                        <span class="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-blue-500/10 text-[var(--accent-blue)] border border-blue-500/20">${item.t}</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-[var(--accent-blue)]/10 text-[var(--accent-blue)] border border-[var(--accent-blue)]/20">${item.t}</span>
                         ${item.s ? '<span class="text-[8px] font-mono text-[var(--accent-orange)] uppercase tracking-wider">Expandable spec</span>' : ''}
                     </div>
                     <p class="text-xs font-bold leading-relaxed text-gray-200">${item.c}</p>
@@ -443,3 +553,4 @@
     </script>
 </body>
 </html>
+
